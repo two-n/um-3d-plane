@@ -3,6 +3,7 @@ import * as TWEEN from '@tweenjs/tween.js' // library for position tweening
 import oc from 'three-orbit-controls'
 
 // lib
+import { brands } from "../globals/constants"
 import * as optimer from '../assets/fonts/optimer_bold.typeface.json'
 import * as uber from '../assets/images/uber.png'
 import * as grubhub from '../assets/images/grubhub.png'
@@ -65,46 +66,29 @@ export default class App {
     // skin for greyed out spheres
     const greyMaterial = new THREE.MeshPhongMaterial({ color: "rgb(220,220,220)"})
 
-    const sphere2 = new THREE.Mesh(
-      geometry,
-      greyMaterial
-    );
+    console.log(brands)
+    brands.forEach(({coordinates, color}) => {
+      // placeholder spheres
+      const sphereGrey = new THREE.Mesh(
+        geometry,
+        greyMaterial
+      );
 
-    // [1, 2, 3].forEach( (num) => console.log(num))
+      const { year_one } = coordinates
+      const { x, y, z } = year_one
+      sphereGrey.position.set(x, y, z)
+      scene.add(sphereGrey)
 
-    // [{x: 150, y: -180, z: 750}, {x: 300, y: -180, z: 900},  {x: 50, y: -180, z: 800}].forEach(num => {
-    //     const greySphere = new THREE.Mesh(
-    //       geometry,
-    //       greyMaterial
-    //     );
-    //     scene.add(greySphere)
-    //     greySphere.position(num.x, num.y, num.z)
-    // })
-    //  const sphere2 = new THREE.Mesh(
-    //    geometry,
-    //    greyMaterial
-    //  );
+      // moving brand spheres // TODO: figure out how to dynamically select them (possibly do all logic in here?)
+      const brandMaterial = new THREE.MeshPhongMaterial({ color })
 
-     sphere2.position.set(150, -180, 750);
-
-     const sphere3 = new THREE.Mesh(
-       geometry,
-       greyMaterial
-     );
-
-     scene.add(sphere2)
-
-     sphere3.position.set(300, -180, 900);
-     scene.add(sphere3)
-
-     const sphere4 = new THREE.Mesh(
-       geometry,
-       greyMaterial
-     );
-
-     sphere4.position.set(50, -180, 800);
-
-     scene.add(sphere4)
+      const sphereBrand = new THREE.Mesh(
+        geometry,
+        brandMaterial
+      );
+      sphereBrand.position.set(x, y, z)
+      scene.add(sphereBrand)
+    })
 
      const material = new THREE.MeshPhongMaterial({ color: "rgb(255, 48, 8)" });
      const sphere = new THREE.Mesh(
@@ -179,6 +163,27 @@ export default class App {
     scene.add(textMeshPB)
     scene.add(textMeshGK)
     scene.add(textMeshR)
+
+    // lines
+
+  const lMaterial = new THREE.LineBasicMaterial( {
+	color: 0000000,
+	linewidth: 1,
+	linecap: 'round', //ignored by WebGLRenderer
+	linejoin:  'round' //ignored by WebGLRenderer
+} );
+
+  const points = [];
+points.push( new THREE.Vector3( 150, -180, 750 ) );
+// points.push( new THREE.Vector3( 700, -180, 0 ) );
+points.push( new THREE.Vector3( 750, -180, 150) );
+
+const lGeometry = new THREE.BufferGeometry().setFromPoints( points );
+
+const line = new THREE.Line( lGeometry, lMaterial );
+
+scene.add( line );
+
 
     // LIGHTING
 
@@ -257,7 +262,7 @@ export default class App {
         target3 = {x: 800, y: -180, z: 50}
         state = false
       }else{
-        target = {x: 750, y: -180, z: 750}
+        target = {x: 150, y: -180, z: 750}
         target2 = {x: 300, y: -180, z: 900}
         target3 = {x: 50, y: -180, z: 800}
         state = true
