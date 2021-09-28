@@ -1,6 +1,8 @@
 import *  as THREE from 'three'
-import * as TWEEN from '@tweenjs/tween.js'
+import * as TWEEN from '@tweenjs/tween.js' // library for position tweening
 import oc from 'three-orbit-controls'
+
+// lib
 import * as optimer from '../assets/fonts/optimer_bold.typeface.json'
 import * as uber from '../assets/images/uber.png'
 import * as grubhub from '../assets/images/grubhub.png'
