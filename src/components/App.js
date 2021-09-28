@@ -1,12 +1,16 @@
-import App from './src/components/App';
+import *  as THREE from 'three'
+import * as TWEEN from '@tweenjs/tween.js'
+import oc from 'three-orbit-controls'
+import * as optimer from '../assets/fonts/optimer_bold.typeface.json'
+import * as uber from '../assets/images/uber.png'
+import * as grubhub from '../assets/images/grubhub.png'
+import * as doordash from '../assets/images/doordash.png'
 
 
-window.onload = () => {
-   new App().init();
-};
-
-function startBasicScene () {
-  // instantiate orbit controls (allows user to interact and rotate graph)
+export default class App {
+  constructor(){}
+  init(){
+    // instantiate orbit controls (allows user to interact and rotate graph)
    const OrbitControls = oc(THREE)
 
    // config
@@ -130,6 +134,7 @@ function startBasicScene () {
 
       // TEXT LOADER
       const font = new THREE.FontLoader().parse(optimer)
+      console.log(font)
 
       const fontConfig = {
         font: font,
@@ -160,13 +165,13 @@ function startBasicScene () {
       // sphereUber.add(textMeshUber)
 
     // axis labels
-     textMeshGP = new THREE.Mesh(geometryGP, new THREE.MeshBasicMaterial({color: 000000}))
+     const textMeshGP = new THREE.Mesh(geometryGP, new THREE.MeshBasicMaterial({color: 000000}))
      textMeshGP.position.set(0, -160, 0)
-     textMeshPB = new THREE.Mesh(geometryPB, new THREE.MeshBasicMaterial({color: 000000}))
+     const textMeshPB = new THREE.Mesh(geometryPB, new THREE.MeshBasicMaterial({color: 000000}))
      textMeshPB.position.set(800, -160, 0)
-     textMeshGK = new THREE.Mesh(geometryGK, new THREE.MeshBasicMaterial({color: 000000}))
+     const textMeshGK = new THREE.Mesh(geometryGK, new THREE.MeshBasicMaterial({color: 000000}))
      textMeshGK.position.set(10, -160, 1050)
-     textMeshR = new THREE.Mesh(geometryR, new THREE.MeshBasicMaterial({color: 000000}))
+     const textMeshR = new THREE.Mesh(geometryR, new THREE.MeshBasicMaterial({color: 000000}))
      textMeshR.position.set(800, -160, 1050)
     scene.add(textMeshGP)
     scene.add(textMeshPB)
@@ -273,4 +278,5 @@ function startBasicScene () {
     animate();
 
     document.body.appendChild( renderer.domElement );
- }
+  }
+}
