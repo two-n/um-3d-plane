@@ -20,7 +20,7 @@ const brands = [
     color: "rgb(255, 48, 8)",
     name: 'A'
   },
-{
+  {
     coordinates: {
       year_one: {
         x: 300,
@@ -36,7 +36,7 @@ const brands = [
     color: "rgb(246, 52, 63)",
     name: 'C'
   },
- {
+  {
     coordinates: {
       year_one: {
         x: 50,
@@ -52,7 +52,7 @@ const brands = [
     color: "rgb(63, 192, 96)",
     name: 'B'
 
-}]
+  }]
 
 var images = {
   "A": doordash,
@@ -61,54 +61,54 @@ var images = {
 }
 
 
-  // CONFIG
-  const dimensions = ({width: 954, height: 50, depth: 1060})
-  const height = window.innerHeight
-  const width = window.innerWidth
+// CONFIG
+const dimensions = ({ width: 954, height: 50, depth: 1060 })
+const height = window.innerHeight
+const width = window.innerWidth
 
-  // plane dimensions
-  const pDims = {
-    x: 0,
-    y: 0,
-    z: 0,
-    w: 1000,
-    h: 10,
-    d: 1000
-  }
+// plane dimensions
+const pDims = {
+  x: 0,
+  y: 0,
+  z: 0,
+  w: 1000,
+  h: 10,
+  d: 1000
+}
 
-  const axisLabels = [
-    {
-      label: 'GROW & PROTECT',
-      coordinates: {
-        x: 0,
-        y: 80,
-        z: 0,
-      }
-    },
-    {
-      label: 'POWER BRAND',
-      coordinates: {
-        x: 800,
-        y: 80,
-        z: 0,
-      }
-    },
-    {
-      label: 'GET KNOWN',
-      coordinates: {
-        x: 10,
-        y: 80,
-        z: 1050,
-      }
-    },
-    {
-      label: 'REINVIGORATE',
-      coordinates: {
-        x: 800,
-        y: 80,
-        z: 1050,
-      }
-    },
+const axisLabels = [
+  {
+    label: 'GROW & PROTECT',
+    coordinates: {
+      x: 0,
+      y: 80,
+      z: 0,
+    }
+  },
+  {
+    label: 'POWER BRAND',
+    coordinates: {
+      x: 800,
+      y: 80,
+      z: 0,
+    }
+  },
+  {
+    label: 'GET KNOWN',
+    coordinates: {
+      x: 10,
+      y: 80,
+      z: 1050,
+    }
+  },
+  {
+    label: 'REINVIGORATE',
+    coordinates: {
+      x: 800,
+      y: 80,
+      z: 1050,
+    }
+  },
 
 ]
 
