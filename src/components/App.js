@@ -3,13 +3,15 @@ import * as TWEEN from '@tweenjs/tween.js' // library for position tweening
 import oc from 'three-orbit-controls'
 
 // lib
-import { brands, images, dimensions, height, width, pDims, axisLabels } from "../globals/constants"
+import { brands, images, dimensions, height, width, pDims, axisLabels, transformedData } from "../globals/constants"
+
 import * as optimer from '../assets/fonts/Gotham_Medium_Regular.typeface.json'
 
 
 export default class App {
   constructor() { }
   init() {
+
     // instantiate orbit controls (allows user to interact and rotate graph)
     const OrbitControls = oc(THREE)
 
@@ -50,8 +52,8 @@ export default class App {
 
     // instantiate square geometry and material
     const square = new THREE.BoxGeometry(1, 5, 1);
-    const lightsquare = new THREE.MeshBasicMaterial({ color: 0xE0C4A8 });
-    const darksquare = new THREE.MeshBasicMaterial({ color: 0x6A4236 });
+    const lightsquare = new THREE.MeshBasicMaterial({ color: "white" });
+    const darksquare = new THREE.MeshBasicMaterial({ color: "lightgrey" });
 
     // create board
     var board = new THREE.Group();
@@ -107,9 +109,9 @@ export default class App {
 
     brands.forEach(({ coordinates, color, name }) => {
       // config
-      const { year_one, year_two } = coordinates
-      const { x, y, z } = year_one
-      const { x: x1, y: y1, z: z1 } = year_two
+      const { previous, current } = coordinates
+      const { x, y, z } = previous
+      const { x: x1, y: y1, z: z1 } = current
 
       // placeholder spheres
       const sphereGrey = new THREE.Mesh(
@@ -254,8 +256,8 @@ export default class App {
         // use the userData property to identify the sphere by name
         const objName = intersected.object.userData.name
         // get the correct coordinates for the sphere to travel to
-        const position1 = brands.find(el => el.name === objName)?.coordinates.year_two
-        const position0 = brands.find(el => el.name === objName)?.coordinates.year_one
+        const position1 = brands.find(el => el.name === objName)?.coordinates.current
+        const position0 = brands.find(el => el.name === objName)?.coordinates.previous
         // adjust the target position based on the sphere's current position
         const target = intersected.object.userData.clicked ? position0 : position1
         // move the sphere to the target position

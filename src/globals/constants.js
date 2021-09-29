@@ -1,63 +1,64 @@
-import * as uber from '../assets/images/uber.png'
-import * as grubhub from '../assets/images/grubhub.png'
-import * as doordash from '../assets/images/doordash.png'
+import * as Accenture from '../assets/images/Accenture_logo.png'
+import * as Deloitte from '../assets/images/Deloitte_logo.png'
+import * as EY from '../assets/images/EY_logo.png'
+import * as Google from '../assets/images/Google_Cloud_logo.png'
+import * as IBM from '../assets/images/IBM_logo.png'
+import * as KPMG from '../assets/images/KPMG_logo.png'
+import * as data from '../data/formattedDataUM.json'
 
 
-const brands = [
-  {
-    coordinates: {
-      year_one: {
-        x: 150,
-        y: 60,
-        z: 750,
-      },
-      year_two: {
-        x: 750,
-        y: 60,
-        z: 150,
-      }
-    },
-    color: "rgb(255, 48, 8)",
-    name: 'A'
-  },
-  {
-    coordinates: {
-      year_one: {
-        x: 300,
-        y: 60,
-        z: 900,
-      },
-      year_two: {
-        x: 900,
-        y: 60,
-        z: 300,
-      }
-    },
-    color: "rgb(246, 52, 63)",
-    name: 'C'
-  },
-  {
-    coordinates: {
-      year_one: {
-        x: 50,
-        y: 60,
-        z: 800,
-      },
-      year_two: {
-        x: 800,
-        y: 60,
-        z: 50,
-      },
-    },
-    color: "rgb(63, 192, 96)",
-    name: 'B'
+const colors = {
+  "Accenture": "#932AF5",
+  "Deloitte": "#90B943",
+  "Ernst & Young": "#FBE64D",
+  "IBM": "#396FBB",
+  "KPMG": "#103081",
+  "Google Cloud": "#D85040 "
+}
 
-  }]
+const y_level = 60
+
+// scales
+// x: (-50, 50)
+// y: (-10%, 10%)
+
+// TODO: make scaling dynamic based on data ranges
+
+const produceCoords = (x, z) => {
+  return {
+    x: (x * 10) + 500, // account for range and board
+    y: y_level, // constand (distance above board)
+    z: parseInt(z.substring(0, z.length - 2)) * -50 + 500 // parse percentage and account for board coords
+  }
+}
+
+const transformedData = data.reduce((acc, [{ name, x_vals, y_vals, year }]) => ({
+  ...acc,
+  [name]: acc[name] ? {
+    ...acc[name],
+    coordinates: {
+      ...acc[name].coordinates,
+      [year]: produceCoords(x_vals, y_vals)
+    }
+  } : {
+      name,
+      coordinates: {
+        [year]: produceCoords(x_vals, y_vals)
+      },
+      color: colors[name]
+    }
+}), {})
+
+
+const brands = Object.values(transformedData)
 
 var images = {
-  "A": doordash,
-  "B": uber,
-  "C": grubhub
+  "Accenture": Accenture,
+  "Deloitte": Deloitte,
+  "Ernst & Young": EY,
+  "IBM": IBM,
+  "KPMG": KPMG,
+  "Google Cloud": Google
 }
 
 
@@ -113,4 +114,4 @@ const axisLabels = [
 ]
 
 
-export { brands, images, dimensions, height, width, pDims, axisLabels }
+export { brands, images, dimensions, height, width, pDims, axisLabels, transformedData }
