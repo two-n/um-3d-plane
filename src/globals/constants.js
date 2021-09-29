@@ -1,3 +1,6 @@
+import * as uber from '../assets/images/uber.png'
+import * as grubhub from '../assets/images/grubhub.png'
+import * as doordash from '../assets/images/doordash.png'
 
 
 const brands = [
@@ -51,4 +54,63 @@ const brands = [
 
 }]
 
-export { brands }
+var images = {
+  "A": doordash,
+  "B": uber,
+  "C": grubhub
+}
+
+
+  // CONFIG
+  const dimensions = ({width: 954, height: 50, depth: 1060})
+  const height = window.innerHeight
+  const width = window.innerWidth
+
+  // plane dimensions
+  const pDims = {
+    x: 0,
+    y: 0,
+    z: 0,
+    w: 1000,
+    h: 10,
+    d: 1000
+  }
+
+  const axisLabels = [
+    {
+      label: 'GROW & PROTECT',
+      coordinates: {
+        x: 0,
+        y: 80,
+        z: 0,
+      }
+    },
+    {
+      label: 'POWER BRAND',
+      coordinates: {
+        x: 800,
+        y: 80,
+        z: 0,
+      }
+    },
+    {
+      label: 'GET KNOWN',
+      coordinates: {
+        x: 10,
+        y: 80,
+        z: 1050,
+      }
+    },
+    {
+      label: 'REINVIGORATE',
+      coordinates: {
+        x: 800,
+        y: 80,
+        z: 1050,
+      }
+    },
+
+]
+
+
+export { brands, images, dimensions, height, width, pDims, axisLabels }
