@@ -40,7 +40,7 @@ export default class App {
 
     // SIMPLE GRID
     const { x, y, z, w, h, d } = pDims
-    const gridHelper = new THREE.GridHelper(10, 2, 'black'); // creates the center lines
+    const gridHelper = new THREE.GridHelper(10, 10, 'black', "lightgrey"); // creates the center lines
     gridHelper.position.set(x + w / 2, y + 13, z + d / 2);
     gridHelper.scale.set(w / 10, h / 2, d / 10);
 
@@ -87,8 +87,19 @@ export default class App {
     board.scale.set(w / 10, h / 2, d / 10);
 
     // add board to scene
-    scene.add(board);
+    // scene.add(board);
 
+    // DEV ONLY
+    var showChecker = true
+    const button = document.getElementById("change")
+    button.addEventListener("click", () => {
+      if (showChecker) {
+        scene.add(board)
+      } else {
+        scene.remove(board)
+      }
+      showChecker = !showChecker
+    })
     //draw spheres
 
     const geometry = new THREE.SphereGeometry(15, 32, 16);
