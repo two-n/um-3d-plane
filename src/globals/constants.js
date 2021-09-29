@@ -13,7 +13,7 @@ const colors = {
   "Ernst & Young": "#FBE64D",
   "IBM": "#396FBB",
   "KPMG": "#103081",
-  "Google Cloud": "#D85040 "
+  "Google Cloud": "#D85040"
 }
 
 const y_level = 60
