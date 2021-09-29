@@ -18,13 +18,13 @@ export default class App {
 
    // config
    const dimensions = ({width: 954, height: 50, depth: 1060})
-   const height = 1008
-   const width = 900
+   const height = window.innerHeight
+   const width = window.innerWidth
 
    // CREATE SCENE
    const scene = new THREE.Scene();
-   scene.position.x = -dimensions.width / 2;
-   scene.position.y = dimensions.height
+   scene.position.x = -width / 2;
+   scene.position.y = height / 2
    scene.position.z = -dimensions.depth / 2;
    scene.background = new THREE.Color(0xffffff);
 
@@ -42,22 +42,70 @@ export default class App {
    renderer.setPixelRatio(window.devicePixelRatio);
    renderer.autoClear = false;
 
+   // HANDLE RESIZE
+   function onWindowResize(){
+     camera.aspect = window.innerHeight / window.innerHeight
+     camera.updateProjectionMatrix();
+     renderer.setSize(window.innerWidth, window.innerHeight)
+   }
+
+   window.addEventListener("resize", onWindowResize)
+
    // SHAPES
 
    // simple plane
    const x = 0;
-   const y = -200;
+   const y = 0;
    const z = 0;
    const w = 1000;
    const h = 10;
    const d = 1000;
 
-   const gridHelper = new THREE.GridHelper(10, 10);
-   gridHelper.position.set(x + w / 2, y, z + d / 2);
-   gridHelper.scale.set(w / 10, h / 2, d / 10);
+  //  const gridHelper = new THREE.GridHelper(10, 10);
+  //  gridHelper.position.set(x + w / 2, y, z + d / 2);
+  //  gridHelper.scale.set(w / 10, h / 2, d / 10);
 
-   // add grid
-   scene.add(gridHelper);
+  //  // add grid
+  //  scene.add(gridHelper);
+
+  // Checkerboard
+  // ref: https://syntaxbytetutorials.com/three-js-orbit-controls-zoom-pan-rotate/
+
+   const square = new THREE.BoxGeometry(1, 5, 1);
+   const lightsquare = new THREE.MeshBasicMaterial( { color: 0xE0C4A8} );
+   const darksquare = new THREE.MeshBasicMaterial( { color: 0x6A4236 });
+
+   var board = new THREE.Group();
+
+   let squareNumber = 1;
+   for (let x = 0; x < 10; x++) {
+     for (let z = 0; z < 10; z++) {
+       let cube;
+       if (z % 2 == 0) {
+         cube = new THREE.Mesh(square, x % 2 == 0 ? lightsquare : darksquare);
+         if (x % 2 != 0) {
+           cube.userData.squareNumber = squareNumber;
+           squareNumber++;
+         }
+       } else {
+         cube = new THREE.Mesh(square, x % 2 == 0 ? darksquare : lightsquare);
+         if (x % 2 == 0) {
+           cube.userData.squareNumber = squareNumber;
+           squareNumber++;
+         }
+       }
+
+       cube.position.set(x, 0, z);
+       board.add(cube);
+     }
+   }
+
+   board.position.set(x + w / 20, y, z + d / 20);
+   board.scale.set(w / 10, h / 2, d / 10);
+
+
+
+   scene.add(board);
 
     //draw spheres
 
@@ -66,7 +114,16 @@ export default class App {
     // skin for greyed out spheres
     const greyMaterial = new THREE.MeshPhongMaterial({ color: "rgb(220,220,220)"})
 
-    console.log(brands)
+
+  const lMaterial = new THREE.LineBasicMaterial( {
+    color: 0xffff,
+    linewidth: 1,
+    linecap: 'round', //ignored by WebGLRenderer
+    linejoin:  'round' //ignored by WebGLRenderer
+  } );
+
+
+
     brands.forEach(({coordinates, color}) => {
       // placeholder spheres
       const sphereGrey = new THREE.Mesh(
@@ -74,20 +131,34 @@ export default class App {
         greyMaterial
       );
 
-      const { year_one } = coordinates
+      const { year_one, year_two } = coordinates
       const { x, y, z } = year_one
+      const {x: x1, y: y1, z: z1 } = year_two
       sphereGrey.position.set(x, y, z)
       scene.add(sphereGrey)
 
       // moving brand spheres // TODO: figure out how to dynamically select them (possibly do all logic in here?)
-      const brandMaterial = new THREE.MeshPhongMaterial({ color })
+      // const brandMaterial = new THREE.MeshPhongMaterial({ color })
 
-      const sphereBrand = new THREE.Mesh(
-        geometry,
-        brandMaterial
-      );
-      sphereBrand.position.set(x, y, z)
-      scene.add(sphereBrand)
+      // const sphereBrand = new THREE.Mesh(
+      //   geometry,
+      //   brandMaterial
+      // );
+      // sphereBrand.position.set(x, y, z)
+      // scene.add(sphereBrand)
+
+      // lines
+      const points = [];
+
+      points.push( new THREE.Vector3( x, y, z ) );
+      // points.push( new THREE.Vector3( 700, 20, 0 ) );
+      points.push( new THREE.Vector3( x1, y1, z1) );
+
+      const lGeometry = new THREE.BufferGeometry().setFromPoints( points );
+
+      const line = new THREE.Line( lGeometry, lMaterial );
+
+      scene.add( line );
     })
 
      const material = new THREE.MeshPhongMaterial({ color: "rgb(255, 48, 8)" });
@@ -96,16 +167,23 @@ export default class App {
        material
      );
 
-     sphere.position.set(150, -180, 750);
+     sphere.position.set(150, 60, 750);
+     sphere.userData.name = "A"
+     sphere.userData.clicked = false
+     console.log(sphere)
 
      scene.add(sphere);
+
+     console.log(sphere.userData.name)
 
      const sphereUber = new THREE.Mesh(
        geometry,
        new THREE.MeshPhongMaterial({ color: "rgb(63, 192, 96)" })
      );
 
-     sphereUber.position.set(50, -180, 800);
+     sphereUber.position.set(50, 60, 800);
+     sphereUber.userData.name = "B"
+     sphereUber.userData.clicked = false
 
      scene.add(sphereUber);
 
@@ -114,13 +192,16 @@ export default class App {
        new THREE.MeshPhongMaterial({ color: "rgb(246, 52, 63)" })
      );
 
-     sphereGrub.position.set(300, -180, 900);
+
+     sphereGrub.position.set(300, 60, 900);
+
+     sphereGrub.userData.name = "C"
+     sphereGrub.userData.clicked = false
 
      scene.add(sphereGrub)
 
       // TEXT LOADER
       const font = new THREE.FontLoader().parse(optimer)
-      console.log(font)
 
       const fontConfig = {
         font: font,
@@ -152,13 +233,13 @@ export default class App {
 
     // axis labels
      const textMeshGP = new THREE.Mesh(geometryGP, new THREE.MeshBasicMaterial({color: 000000}))
-     textMeshGP.position.set(0, -160, 0)
+     textMeshGP.position.set(0, 80, 0)
      const textMeshPB = new THREE.Mesh(geometryPB, new THREE.MeshBasicMaterial({color: 000000}))
-     textMeshPB.position.set(800, -160, 0)
+     textMeshPB.position.set(800, 80, 0)
      const textMeshGK = new THREE.Mesh(geometryGK, new THREE.MeshBasicMaterial({color: 000000}))
-     textMeshGK.position.set(10, -160, 1050)
+     textMeshGK.position.set(10, 80, 1050)
      const textMeshR = new THREE.Mesh(geometryR, new THREE.MeshBasicMaterial({color: 000000}))
-     textMeshR.position.set(800, -160, 1050)
+     textMeshR.position.set(800, 80, 1050)
     scene.add(textMeshGP)
     scene.add(textMeshPB)
     scene.add(textMeshGK)
@@ -166,23 +247,23 @@ export default class App {
 
     // lines
 
-  const lMaterial = new THREE.LineBasicMaterial( {
-	color: 0000000,
-	linewidth: 1,
-	linecap: 'round', //ignored by WebGLRenderer
-	linejoin:  'round' //ignored by WebGLRenderer
-} );
+//   const lMaterial = new THREE.LineBasicMaterial( {
+// 	color: 0000000,
+// 	linewidth: 1,
+// 	linecap: 'round', //ignored by WebGLRenderer
+// 	linejoin:  'round' //ignored by WebGLRenderer
+// } );
 
-  const points = [];
-points.push( new THREE.Vector3( 150, -180, 750 ) );
-// points.push( new THREE.Vector3( 700, -180, 0 ) );
-points.push( new THREE.Vector3( 750, -180, 150) );
+//   const points = [];
+// points.push( new THREE.Vector3( 150, 20, 750 ) );
+// // points.push( new THREE.Vector3( 700, 20, 0 ) );
+// points.push( new THREE.Vector3( 750, 20, 150) );
 
-const lGeometry = new THREE.BufferGeometry().setFromPoints( points );
+// const lGeometry = new THREE.BufferGeometry().setFromPoints( points );
 
-const line = new THREE.Line( lGeometry, lMaterial );
+// const line = new THREE.Line( lGeometry, lMaterial );
 
-scene.add( line );
+// scene.add( line );
 
 
     // LIGHTING
@@ -200,8 +281,9 @@ scene.add( line );
     // USER CONTROLS
      const controls =  new OrbitControls(camera, renderer.domElement)
      controls.screenSpacePanning = false;
+     controls.enablePanning = false;
      // restrict rotation
-     controls.maxPolarAngle = Math.PI / 2.5;
+     controls.maxPolarAngle = Math.PI / 2.8;
      controls.minPolarAngle = Math.PI / 5;
      controls.minDistance = 500;
      controls.maxDistance = 1500;
@@ -239,10 +321,35 @@ scene.add( line );
 
     // define tween for each sphere
 
+    var toggleOn = false
     // respond to click events
     const button = document.getElementById("change")
     button.addEventListener("click", () => {
     moveNodes()
+
+
+    brands.forEach(({coordinates, color, name}) => {
+
+
+      const { year_one, year_two } = coordinates
+      const { x, y, z } = year_one
+      const {x: x1, y: y1, z: z1 } = year_two
+
+      // lines
+      const points = [];
+      scene.remove(name)
+      if (toggleOn) {
+      points.push( new THREE.Vector3( x, y, z ) );
+      // points.push( new THREE.Vector3( 700, 20, 0 ) );
+      points.push( new THREE.Vector3( x1, y1, z1) );
+      }
+      const lGeometry = new THREE.BufferGeometry().setFromPoints( points );
+
+      const line = new THREE.Line( lGeometry, lMaterial );
+      line.name = name
+
+      scene.add( line );
+    })
     })
 
      var tween = new TWEEN.Tween(sphere.position).easing(TWEEN.Easing.Sinusoidal.InOut)
@@ -254,25 +361,12 @@ scene.add( line );
      var target3;
      var state = true;
 
-     // translate positions
-     function moveNodes(){
-      if(state){
-        target = {x: 600, y: -180, z: 150}
-        target2 = {x: 900, y: -180, z: 300}
-        target3 = {x: 800, y: -180, z: 50}
-        state = false
-      }else{
-        target = {x: 150, y: -180, z: 750}
-        target2 = {x: 300, y: -180, z: 900}
-        target3 = {x: 50, y: -180, z: 800}
-        state = true
-      }
+    // translate positions
+    function moveNodes(sphere, target){
+      var tween = new TWEEN.Tween(sphere.position).easing(TWEEN.Easing.Sinusoidal.InOut)
+      sphere.userData.clicked = !sphere.userData.clicked
       requestAnimationFrame(animate)
       tween.to(target, 2000)
-      tween2.to(target2, 2000)
-      tween3.to(target3, 2000)
-      tween3.start()
-      tween2.start()
       tween.start()
     }
 
@@ -282,6 +376,49 @@ scene.add( line );
       requestAnimationFrame(animate);
     };
 
+
+    // click
+
+    var cameraOrtho =  new THREE.OrthographicCamera(-width/2, width/2, height/2, -height/2, 1, 10);
+      cameraOrtho.position.z = 10;
+
+    var raycaster = new THREE.Raycaster()
+    var mouse = ({
+      screen: new THREE.Vector2(),
+      scene: new THREE.Vector2(),
+      animating: false,
+      focus: null
+    })
+
+    var trackMouse = (e) => {
+      console.log('tracking mouse')
+      e.preventDefault();
+      if (e.target instanceof HTMLCanvasElement) {
+        const x = e.offsetX + e.target.offsetLeft;
+        const y = e.offsetY + e.target.offsetTop;
+        mouse.screen.x = x;
+        mouse.screen.y = y;
+        mouse.scene.x = (e.offsetX / width) * 2 - 1;
+        mouse.scene.y = -(e.offsetY / height) * 2 + 1;
+        if (!mouse.animating) intersect();
+      }
+    }
+
+   var intersect = () => {
+      camera.updateMatrixWorld();
+      cameraOrtho.updateMatrixWorld();
+      raycaster.setFromCamera(mouse.scene, camera);
+      const intersects = raycaster.intersectObjects(scene.children);
+      const index = intersects.length > 1 ? 1 : 0
+      const objName = intersects[index].object.userData.name
+      const position1 = brands.find( el => el.name === objName).coordinates.year_two
+      const position0 = brands.find( el => el.name === objName).coordinates.year_one
+      const target = intersects[index].object.userData.clicked ? position0 : position1
+      moveNodes(intersects[index].object, target)
+
+    }
+
+    document.body.addEventListener("click", trackMouse, false);
     animate();
 
     document.body.appendChild( renderer.domElement );
