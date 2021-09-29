@@ -249,16 +249,19 @@ export default class App {
       // if the number of intersected objects is greater than one, select the last one
       // this selects the colored sphere which is superimposed over the greyed out spheres
       const index = intersects.length > 1 ? 1 : 0
-      // use the userData property to identify the sphere by name
-      const objName = intersects[index].object.userData.name
-      // get the correct coordinates for the sphere to travel to
-      const position1 = brands.find(el => el.name === objName).coordinates.year_two
-      const position0 = brands.find(el => el.name === objName).coordinates.year_one
-      // adjust the target position based on the sphere's current position
-      const target = intersects[index].object.userData.clicked ? position0 : position1
-      // move the sphere to the target position
-      // intersects[index].object is the sphere
-      moveNodes(intersects[index].object, target)
+      const intersected = intersects[index]
+      if (intersected) {
+        // use the userData property to identify the sphere by name
+        const objName = intersected.object.userData.name
+        // get the correct coordinates for the sphere to travel to
+        const position1 = brands.find(el => el.name === objName)?.coordinates.year_two
+        const position0 = brands.find(el => el.name === objName)?.coordinates.year_one
+        // adjust the target position based on the sphere's current position
+        const target = intersected.object.userData.clicked ? position0 : position1
+        // move the sphere to the target position
+        // intersected.object is the sphere
+        moveNodes(intersected.object, target)
+      }
     }
 
     // HANDLE RESIZE EVENT
