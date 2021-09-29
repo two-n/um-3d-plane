@@ -40,7 +40,7 @@ export default class App {
 
     // SIMPLE GRID
     const { x, y, z, w, h, d } = pDims
-    const gridHelper = new THREE.GridHelper(10, 2, '#FF00FF'); // creates the center lines
+    const gridHelper = new THREE.GridHelper(10, 2, 'black'); // creates the center lines
     gridHelper.position.set(x + w / 2, y + 13, z + d / 2);
     gridHelper.scale.set(w / 10, h / 2, d / 10);
 
