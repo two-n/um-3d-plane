@@ -4,7 +4,7 @@ import oc from 'three-orbit-controls'
 
 // lib
 import { brands } from "../globals/constants"
-import * as optimer from '../assets/fonts/optimer_bold.typeface.json'
+import * as optimer from '../assets/fonts/Gotham_Medium_Regular.typeface.json'
 import * as uber from '../assets/images/uber.png'
 import * as grubhub from '../assets/images/grubhub.png'
 import * as doordash from '../assets/images/doordash.png'
@@ -321,36 +321,36 @@ export default class App {
 
     // define tween for each sphere
 
-    var toggleOn = false
-    // respond to click events
-    const button = document.getElementById("change")
-    button.addEventListener("click", () => {
-    moveNodes()
+    // var toggleOn = false
+    // // respond to click events
+    // const button = document.getElementById("change")
+    // button.addEventListener("click", () => {
+    // moveNodes()
 
 
-    brands.forEach(({coordinates, color, name}) => {
+    // brands.forEach(({coordinates, color, name}) => {
 
 
-      const { year_one, year_two } = coordinates
-      const { x, y, z } = year_one
-      const {x: x1, y: y1, z: z1 } = year_two
+    //   const { year_one, year_two } = coordinates
+    //   const { x, y, z } = year_one
+    //   const {x: x1, y: y1, z: z1 } = year_two
 
-      // lines
-      const points = [];
-      scene.remove(name)
-      if (toggleOn) {
-      points.push( new THREE.Vector3( x, y, z ) );
-      // points.push( new THREE.Vector3( 700, 20, 0 ) );
-      points.push( new THREE.Vector3( x1, y1, z1) );
-      }
-      const lGeometry = new THREE.BufferGeometry().setFromPoints( points );
+    //   // lines
+    //   const points = [];
+    //   scene.remove(name)
+    //   if (toggleOn) {
+    //   points.push( new THREE.Vector3( x, y, z ) );
+    //   // points.push( new THREE.Vector3( 700, 20, 0 ) );
+    //   points.push( new THREE.Vector3( x1, y1, z1) );
+    //   }
+    //   const lGeometry = new THREE.BufferGeometry().setFromPoints( points );
 
-      const line = new THREE.Line( lGeometry, lMaterial );
-      line.name = name
+    //   const line = new THREE.Line( lGeometry, lMaterial );
+    //   line.name = name
 
-      scene.add( line );
-    })
-    })
+    //   scene.add( line );
+    // })
+    // })
 
      var tween = new TWEEN.Tween(sphere.position).easing(TWEEN.Easing.Sinusoidal.InOut)
      var tween2 = new TWEEN.Tween(sphereGrub.position).easing(TWEEN.Easing.Sinusoidal.InOut)
