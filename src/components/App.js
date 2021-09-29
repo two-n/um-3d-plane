@@ -61,12 +61,12 @@ export default class App {
    const h = 10;
    const d = 1000;
 
-  //  const gridHelper = new THREE.GridHelper(10, 10);
-  //  gridHelper.position.set(x + w / 2, y, z + d / 2);
-  //  gridHelper.scale.set(w / 10, h / 2, d / 10);
+   const gridHelper = new THREE.GridHelper(10, 2, '#FF00FF');
+   gridHelper.position.set(x + w / 2, y + 13, z + d / 2);
+   gridHelper.scale.set(w / 10, h / 2, d / 10);
 
-  //  // add grid
-  //  scene.add(gridHelper);
+   // add grid
+   scene.add(gridHelper);
 
   // Checkerboard
   // ref: https://syntaxbytetutorials.com/three-js-orbit-controls-zoom-pan-rotate/
@@ -115,11 +115,11 @@ export default class App {
     const greyMaterial = new THREE.MeshPhongMaterial({ color: "rgb(220,220,220)"})
 
 
-  const lMaterial = new THREE.LineBasicMaterial( {
+  const lMaterial = new THREE.LineDashedMaterial( {
     color: 0xffff,
     linewidth: 1,
     linecap: 'round', //ignored by WebGLRenderer
-    linejoin:  'round' //ignored by WebGLRenderer
+    linejoin:  'round', //ignored by WebGLRenderer
   } );
 
 
