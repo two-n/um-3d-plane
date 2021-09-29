@@ -141,7 +141,7 @@ export default class App {
       const planeGeometry = new THREE.PlaneGeometry(100, 100);
       const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
       const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-      plane.position.y = 100
+      plane.position.y = 60
       sphereBrand.add(plane);
 
       // lines
@@ -209,7 +209,7 @@ export default class App {
       sphere.userData.clicked = !sphere.userData.clicked
       // requestAnimationFrame(animate)
       // move sphere to target on a 2000ms duration
-      tween.to(target, 2000)
+      tween.to(target, 1000)
       tween.start()
     }
 
