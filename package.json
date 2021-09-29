@@ -1,0 +1,31 @@
+{
+  "name": "um-3d-plot",
+  "version": "1.0.0",
+  "description": "UM 3d scatterplot",
+  "repository": "https://github.com/two-n/um-3d-plane.git",
+  "author": "miasza < mia@two-n.com >",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@parcel/transformer-sass": "2.0.0-rc.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.21.1",
+    "parcel": "^2.0.0-nightly.286",
+    "sass": "^1.26.8"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "prebuild": "rm -rf dist",
+    "build": "parcel build index.html",
+    "prototypes-build": "yarn prebuild && parcel build index.html --public-url http://prototypes.two-n.com/um-3d-plane",
+    "deploy": "rsync -avz --delete ./dist/ twoninc@two-n.com:/home/twoninc/prototypes.two-n.com/um-3d-plane"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^18.6.4",
+    "three": "^0.132.2",
+    "three-orbit-controls": "^82.1.0",
+    "tweenjs": "^1.0.2"
+  }
+}
