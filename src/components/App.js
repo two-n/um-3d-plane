@@ -3,7 +3,7 @@ import * as TWEEN from '@tweenjs/tween.js' // library for position tweening
 import oc from 'three-orbit-controls'
 
 // lib
-import * as UM_LOGO from '../assets/images/UM_Logo.png'
+import * as UM_LOGO from '../assets/images/UM_Logo_Large.png'
 
 import { brands, images, dimensions, height, width, pDims, axisLabels, transformedData } from "../globals/constants"
 
@@ -114,7 +114,7 @@ export default class App {
     const imageTexture = new THREE.TextureLoader().load(UM_LOGO);
 
     //draw image container for UM Logo
-    const planeGeometry = new THREE.PlaneGeometry(100, 100).rotateX(-Math.PI * 0.5);
+    const planeGeometry = new THREE.PlaneGeometry(140, 140).rotateX(-Math.PI * 0.5);
     const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.position.y = 10
@@ -182,7 +182,7 @@ export default class App {
 
     function panOut() {
       var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
-      const target = { x: 100, y: 750, z: 1500 }
+      const target = { x: 100, y: 550, z: 1300 }
       tween.to(target, 3000)
       tween.start()
       tween.onComplete(function () {
