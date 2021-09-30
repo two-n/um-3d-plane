@@ -19,13 +19,10 @@ export default class App {
 
     // CREATE SCENE
     const scene = new THREE.Scene();
-    scene.position.x = -width / 2;
-    scene.position.y = height / 2
-    scene.position.z = -dimensions.depth / 2;
     scene.background = new THREE.Color(0xffffff);
 
     // CREATE CAMERA
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.2, 4500);
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.2, 4500);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     // position camera centered and looking down from above
@@ -43,8 +40,7 @@ export default class App {
     // SIMPLE GRID
     const { x, y, z, w, h, d } = pDims
     const gridHelper = new THREE.GridHelper(10, 10, 'black', "lightgrey"); // creates the center lines
-    gridHelper.position.set(x + w / 2, y + 13, z + d / 2);
-    gridHelper.scale.set(w / 10, h / 2, d / 10);
+    gridHelper.scale.set(100, 0, 100);
 
     // add grid
     scene.add(gridHelper);
@@ -85,7 +81,9 @@ export default class App {
     }
 
     // position board over grid
-    board.position.set(x + w / 20, y, z + d / 20);
+    board.position.set(width / 2, 50, height / 2);
+    // gridHelper.scale.set(w / 10, h / 2, d / 10);
+
     board.scale.set(w / 10, h / 2, d / 10);
 
     // add board to scene
@@ -177,7 +175,7 @@ export default class App {
     const planeGeometry = new THREE.PlaneGeometry(100, 100).rotateX(-Math.PI * 0.5);
     const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.position.set(500, 20, 500)
+    plane.position.y = 10
     plane.userData.name = "um_logo"
     scene.add(plane);
 
@@ -191,14 +189,14 @@ export default class App {
     }
 
     // create axis labels
-    axisLabels.forEach(({ label, coordinates }) => {
-      const { x, y, z } = coordinates
-      const textGeometry = new THREE.TextGeometry(label, fontConfig);
-      const textMaterial = new THREE.MeshBasicMaterial({ color: 000000 })
-      const textMesh = new THREE.Mesh(textGeometry, textMaterial)
-      textMesh.position.set(x, y, z)
-      scene.add(textMesh)
-    })
+    // axisLabels.forEach(({ label, coordinates }) => {
+    //   const { x, y, z } = coordinates
+    //   const textGeometry = new THREE.TextGeometry(label, fontConfig);
+    //   const textMaterial = new THREE.MeshBasicMaterial({ color: 000000 })
+    //   const textMesh = new THREE.Mesh(textGeometry, textMaterial)
+    //   textMesh.position.set(x, y, z)
+    //   scene.add(textMesh)
+    // })
 
     // LIGHTING
 
@@ -286,24 +284,22 @@ export default class App {
       raycaster.setFromCamera(mouse.scene, camera);
       // find all elements being intersected by mouse
       const intersects = raycaster.intersectObjects(scene.children);
-      // if the number of intersected objects is greater than one, select the last one
+      const logo = intersects.find(intersected => intersected.object.userData.name == "um_logo")
+      if (logo) panOut()
       // this selects the colored sphere which is superimposed over the greyed out spheres
-      const index = intersects.length > 1 ? 1 : 0
-      const intersected = intersects[index]
-      if (intersected) {
+      const intersectedSphere = intersects.find(intersected => intersected.object.userData.name &&
+        intersected.object.userData.name != "um_logo")
+      if (intersectedSphere) {
         // use the userData property to identify the sphere by name
-        const objName = intersected.object.userData.name
+        const objName = intersectedSphere.object.userData.name
         // get the correct coordinates for the sphere to travel to
-        if (objName == "um_logo") {
-          panOut()
-        }
         const position1 = brands.find(el => el.name === objName)?.coordinates.current
         const position0 = brands.find(el => el.name === objName)?.coordinates.previous
         // adjust the target position based on the sphere's current position
-        const target = intersected.object.userData.clicked ? position0 : position1
+        const target = intersectedSphere.object.userData.clicked ? position0 : position1
         // move the sphere to the target position
         // intersected.object is the sphere
-        moveNodes(intersected.object, target)
+        moveNodes(intersectedSphere.object, target)
       }
     }
 
