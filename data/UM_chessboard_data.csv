@@ -1,13 +1,9 @@
-name,x_vals,y_vals,Year
-Accenture,8,5 %,previous year
-Deloitte,11,0 %,previous year
-Ernst & Young,10,7 %,previous year
-Google Cloud,14,-2 %,previous year
-IBM,29,1 %,previous year
-KPMG,6,-2 %,previous year
-Accenture,7,3 %,current year
-Deloitte,10,0 %,current year
-Ernst & Young,9,2 %,current year
-Google Cloud,9,3 %,current year
-IBM,23,-1 %,current year
-KPMG,6,-2 %,current year
+name,x_vals,z_vals,y_vals,year
+Accenture,117,114,115,Previous Year
+Deloitte,164,183,133,Previous Year
+Ernst & Young,22,46,91,Previous Year
+KPMG,98,57,61,Previous Year
+Accenture,115,118,117,Current Year
+Deloitte,164,175,135,Current Year
+Ernst & Young,20,39,92,Current Year
+KPMG,101,68,56,Current Year
