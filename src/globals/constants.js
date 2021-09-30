@@ -4,7 +4,7 @@ import * as EY from '../assets/images/EY_logo.png'
 import * as Google from '../assets/images/Google_Cloud_logo.png'
 import * as IBM from '../assets/images/IBM_logo.png'
 import * as KPMG from '../assets/images/KPMG_logo.png'
-import * as data from '../data/formattedDataUM.json'
+import * as data from '../../data/formattedData.json'
 
 
 const colors = {

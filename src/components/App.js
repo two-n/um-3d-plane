@@ -28,7 +28,6 @@ export default class App {
     // position camera centered and looking down from above
     camera.position.set(0, 0, 0);
 
-
     // CREATE RENDERER
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -191,11 +190,11 @@ export default class App {
 
     function panOut() {
       var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
-
-      const target = { x: 0, y: 750, z: 1500 }
+      const target = { x: 100, y: 750, z: 1500 }
       tween.to(target, 3000)
       tween.start()
       tween.onComplete(function () {
+
         draw()
       })
     }
