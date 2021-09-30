@@ -45,62 +45,13 @@ export default class App {
     // add grid
     scene.add(gridHelper);
 
-    // CHECKERBOARD
-    // ref: https://syntaxbytetutorials.com/three-js-orbit-controls-zoom-pan-rotate/
+    const gridHelper2 = new THREE.GridHelper(10, 10, 'black', "lightgrey").rotateX(-Math.PI * 0.5); // creates the center lines
+    gridHelper2.scale.set(100, 0, 100);
+    gridHelper2.position.z = -500
+    gridHelper2.position.y = 500
 
-    // instantiate square geometry and material
-    const square = new THREE.BoxGeometry(1, 5, 1);
-    const lightsquare = new THREE.MeshBasicMaterial({ color: "white" });
-    const darksquare = new THREE.MeshBasicMaterial({ color: "lightgrey" });
+    // scene.add(gridHelper2)
 
-    // create board
-    var board = new THREE.Group();
-
-    // create 10 x 10 board
-    let squareNumber = 1;
-    for (let x = 0; x < 10; x++) {
-      for (let z = 0; z < 10; z++) {
-        let cube;
-        if (z % 2 == 0) {
-          cube = new THREE.Mesh(square, x % 2 == 0 ? lightsquare : darksquare);
-          if (x % 2 != 0) {
-            cube.userData.squareNumber = squareNumber;
-            squareNumber++;
-          }
-        } else {
-          cube = new THREE.Mesh(square, x % 2 == 0 ? darksquare : lightsquare);
-          if (x % 2 == 0) {
-            cube.userData.squareNumber = squareNumber;
-            squareNumber++;
-          }
-        }
-
-        cube.position.set(x, 0, z);
-        board.add(cube);
-      }
-    }
-
-    // position board over grid
-    board.position.set(width / 2, 50, height / 2);
-    // gridHelper.scale.set(w / 10, h / 2, d / 10);
-
-    board.scale.set(w / 10, h / 2, d / 10);
-
-    // add board to scene
-    // scene.add(board);
-
-    // DEV ONLY
-    var showChecker = true
-    const button = document.getElementById("change")
-    button.addEventListener("click", () => {
-      if (showChecker) {
-        scene.add(board)
-      } else {
-        scene.remove(board)
-      }
-
-      showChecker = !showChecker
-    })
 
     //draw spheres
 
@@ -218,7 +169,7 @@ export default class App {
     // restrict rotation
     controls.maxPolarAngle = Math.PI / 2.8;
     controls.minPolarAngle = 0;
-    controls.minDistance = 500;
+    controls.minDistance = 200;
     controls.maxDistance = 1500;
     controls.minAzimuthAngle = -Math.PI / 5;
     controls.maxAzimuthAngle = Math.PI / 5;
@@ -239,9 +190,9 @@ export default class App {
     }
 
     function panOut() {
-      var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Linear.None)
+      var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
 
-      const target = { x: 0, y: 750, z: 1000 }
+      const target = { x: 0, y: 750, z: 1500 }
       tween.to(target, 3000)
       tween.start()
       tween.onComplete(function () {
