@@ -69,7 +69,7 @@ export default class App {
 
         const transparentMaterial = new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.5 })
 
-        const sphereGrey = new THREE.Mesh(
+        const sphereTransparent = new THREE.Mesh(
           geometry,
           transparentMaterial
         );
