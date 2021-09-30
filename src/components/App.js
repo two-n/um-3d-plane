@@ -56,18 +56,6 @@ export default class App {
 
     const geometry = new THREE.SphereGeometry(15, 32, 16);
 
-    // skin for greyed out spheres
-    const greyMaterial = new THREE.MeshPhongMaterial({ color: "rgb(220,220,220)" })
-
-
-    const lMaterial = new THREE.LineDashedMaterial({
-      color: 0xffff,
-      linewidth: 1,
-      linecap: 'round', //ignored by WebGLRenderer
-      linejoin: 'round', //ignored by WebGLRenderer
-    });
-
-
     // DRAW SPHERES, LINES and LABELS
 
     const draw = () => {
@@ -78,12 +66,15 @@ export default class App {
         const { x: x1, y: y1, z: z1 } = current
 
         // placeholder spheres
+
+        const transparentMaterial = new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.5 })
+
         const sphereGrey = new THREE.Mesh(
           geometry,
-          greyMaterial
+          transparentMaterial
         );
-        sphereGrey.position.set(x, y, z)
-        scene.add(sphereGrey)
+        sphereTransparent.position.set(x, y, z)
+        scene.add(sphereTransparent)
 
         // moving brand spheres
         const brandMaterial = new THREE.MeshPhongMaterial({ color })
@@ -97,6 +88,7 @@ export default class App {
         sphereBrand.userData.clicked = false
         scene.add(sphereBrand)
 
+
         // sphere image labels
         const imageBrand = images[name]
         const imageTexture = new THREE.TextureLoader().load(imageBrand);
@@ -109,13 +101,13 @@ export default class App {
         sphereBrand.add(plane);
 
         // lines
-        const points = [];
-
-        points.push(new THREE.Vector3(x, y, z));
-        points.push(new THREE.Vector3(x1, y1, z1));
-        const lGeometry = new THREE.BufferGeometry().setFromPoints(points);
-        const line = new THREE.Line(lGeometry, lMaterial);
-        scene.add(line);
+        const tube = new THREE.Mesh(
+          new THREE.TubeGeometry(
+            new THREE.CatmullRomCurve3([
+              new THREE.Vector3(x, y, z),
+              new THREE.Vector3(x1, y1, z1)]), 512, .5, 8, false),
+          new THREE.MeshBasicMaterial({ color: color }));
+        scene.add(tube);
       })
     }
 
