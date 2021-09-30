@@ -4,7 +4,7 @@ import * as EY from '../assets/images/EY_logo.png'
 import * as Google from '../assets/images/Google_Cloud_logo.png'
 import * as IBM from '../assets/images/IBM_logo.png'
 import * as KPMG from '../assets/images/KPMG_logo.png'
-import * as data from '../data/formattedDataUM.json'
+import * as data from '../../data/formattedData.json'
 
 
 const colors = {
@@ -26,9 +26,9 @@ const y_level = 60
 
 const produceCoords = (x, z) => {
   return {
-    x: (x * 10) + 500, // account for range and board
+    x: (x * 10), // account for range and board
     y: y_level, // constand (distance above board)
-    z: parseInt(z.substring(0, z.length - 2)) * -50 + 500 // parse percentage and account for board coords
+    z: parseInt(z.substring(0, z.length - 2)) * -50  // parse percentage and account for board coords
   }
 }
 
@@ -64,7 +64,7 @@ var images = {
 
 // CONFIG
 const dimensions = ({ width: 954, height: 50, depth: 1060 })
-const height = window.innerHeight
+const height = window.innerHeight * 0.8
 const width = window.innerWidth
 
 // plane dimensions
@@ -81,33 +81,33 @@ const axisLabels = [
   {
     label: 'GROW & PROTECT',
     coordinates: {
-      x: 0,
-      y: 80,
-      z: 0,
+      x: -500,
+      y: 20,
+      z: -500,
     }
   },
   {
     label: 'POWER BRAND',
     coordinates: {
-      x: 800,
-      y: 80,
-      z: 0,
+      x: 300,
+      y: 20,
+      z: -500,
     }
   },
   {
     label: 'GET KNOWN',
     coordinates: {
-      x: 10,
-      y: 80,
-      z: 1050,
+      x: -500,
+      y: 20,
+      z: 500,
     }
   },
   {
     label: 'REINVIGORATE',
     coordinates: {
-      x: 800,
-      y: 80,
-      z: 1050,
+      x: 260,
+      y: 20,
+      z: 500,
     }
   },
 

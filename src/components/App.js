@@ -3,9 +3,11 @@ import * as TWEEN from '@tweenjs/tween.js' // library for position tweening
 import oc from 'three-orbit-controls'
 
 // lib
+import * as UM_LOGO from '../assets/images/UM_Logo_Large.png'
+
 import { brands, images, dimensions, height, width, pDims, axisLabels, transformedData } from "../globals/constants"
 
-import * as optimer from '../assets/fonts/Gotham_Medium_Regular.typeface.json'
+import * as gotham from '../assets/fonts/Gotham_Black_Regular.json'
 
 
 export default class App {
@@ -17,18 +19,14 @@ export default class App {
 
     // CREATE SCENE
     const scene = new THREE.Scene();
-    scene.position.x = -width / 2;
-    scene.position.y = height / 2
-    scene.position.z = -dimensions.depth / 2;
     scene.background = new THREE.Color(0xffffff);
 
     // CREATE CAMERA
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.2, 4500);
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.2, 4500);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     // position camera centered and looking down from above
-    camera.position.set(0, 750, 1000);
-
+    camera.position.set(0, 0, 0);
 
     // CREATE RENDERER
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -41,132 +39,90 @@ export default class App {
     // SIMPLE GRID
     const { x, y, z, w, h, d } = pDims
     const gridHelper = new THREE.GridHelper(10, 10, 'black', "lightgrey"); // creates the center lines
-    gridHelper.position.set(x + w / 2, y + 13, z + d / 2);
-    gridHelper.scale.set(w / 10, h / 2, d / 10);
+    gridHelper.scale.set(100, 0, 100);
 
     // add grid
     scene.add(gridHelper);
 
-    // CHECKERBOARD
-    // ref: https://syntaxbytetutorials.com/three-js-orbit-controls-zoom-pan-rotate/
+    const gridHelper2 = new THREE.GridHelper(10, 10, 'black', "lightgrey").rotateX(-Math.PI * 0.5); // creates the center lines
+    gridHelper2.scale.set(100, 0, 100);
+    gridHelper2.position.z = -500
+    gridHelper2.position.y = 500
 
-    // instantiate square geometry and material
-    const square = new THREE.BoxGeometry(1, 5, 1);
-    const lightsquare = new THREE.MeshBasicMaterial({ color: "white" });
-    const darksquare = new THREE.MeshBasicMaterial({ color: "lightgrey" });
+    // scene.add(gridHelper2)
 
-    // create board
-    var board = new THREE.Group();
 
-    // create 10 x 10 board
-    let squareNumber = 1;
-    for (let x = 0; x < 10; x++) {
-      for (let z = 0; z < 10; z++) {
-        let cube;
-        if (z % 2 == 0) {
-          cube = new THREE.Mesh(square, x % 2 == 0 ? lightsquare : darksquare);
-          if (x % 2 != 0) {
-            cube.userData.squareNumber = squareNumber;
-            squareNumber++;
-          }
-        } else {
-          cube = new THREE.Mesh(square, x % 2 == 0 ? darksquare : lightsquare);
-          if (x % 2 == 0) {
-            cube.userData.squareNumber = squareNumber;
-            squareNumber++;
-          }
-        }
-
-        cube.position.set(x, 0, z);
-        board.add(cube);
-      }
-    }
-
-    // position board over grid
-    board.position.set(x + w / 20, y, z + d / 20);
-    board.scale.set(w / 10, h / 2, d / 10);
-
-    // add board to scene
-    // scene.add(board);
-
-    // DEV ONLY
-    var showChecker = true
-    const button = document.getElementById("change")
-    button.addEventListener("click", () => {
-      if (showChecker) {
-        scene.add(board)
-      } else {
-        scene.remove(board)
-      }
-      showChecker = !showChecker
-    })
     //draw spheres
 
     const geometry = new THREE.SphereGeometry(15, 32, 16);
 
-    // skin for greyed out spheres
-    const greyMaterial = new THREE.MeshPhongMaterial({ color: "rgb(220,220,220)" })
-
-
-    const lMaterial = new THREE.LineDashedMaterial({
-      color: 0xffff,
-      linewidth: 1,
-      linecap: 'round', //ignored by WebGLRenderer
-      linejoin: 'round', //ignored by WebGLRenderer
-    });
-
-
     // DRAW SPHERES, LINES and LABELS
 
-    brands.forEach(({ coordinates, color, name }) => {
-      // config
-      const { previous, current } = coordinates
-      const { x, y, z } = previous
-      const { x: x1, y: y1, z: z1 } = current
+    const draw = () => {
+      brands.forEach(({ coordinates, color, name }) => {
+        // config
+        const { previous, current } = coordinates
+        const { x, y, z } = previous
+        const { x: x1, y: y1, z: z1 } = current
 
-      // placeholder spheres
-      const sphereGrey = new THREE.Mesh(
-        geometry,
-        greyMaterial
-      );
-      sphereGrey.position.set(x, y, z)
-      scene.add(sphereGrey)
+        // placeholder spheres
 
-      // moving brand spheres
-      const brandMaterial = new THREE.MeshPhongMaterial({ color })
-      const sphereBrand = new THREE.Mesh(
-        geometry,
-        brandMaterial
-      );
+        const transparentMaterial = new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.5 })
 
-      sphereBrand.position.set(x, y, z)
-      sphereBrand.userData.name = name
-      sphereBrand.userData.clicked = false
-      scene.add(sphereBrand)
+        const sphereTransparent = new THREE.Mesh(
+          geometry,
+          transparentMaterial
+        );
+        sphereTransparent.position.set(x, y, z)
+        scene.add(sphereTransparent)
 
-      // sphere image labels
-      const imageBrand = images[name]
-      const imageTexture = new THREE.TextureLoader().load(imageBrand);
+        // moving brand spheres
+        const brandMaterial = new THREE.MeshPhongMaterial({ color })
+        const sphereBrand = new THREE.Mesh(
+          geometry,
+          brandMaterial
+        );
 
-      //draw image container for logos
-      const planeGeometry = new THREE.PlaneGeometry(100, 100);
-      const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
-      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-      plane.position.y = 60
-      sphereBrand.add(plane);
+        sphereBrand.position.set(x, y, z)
+        sphereBrand.userData.name = name
+        sphereBrand.userData.clicked = false
+        scene.add(sphereBrand)
 
-      // lines
-      const points = [];
 
-      points.push(new THREE.Vector3(x, y, z));
-      points.push(new THREE.Vector3(x1, y1, z1));
-      const lGeometry = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(lGeometry, lMaterial);
-      scene.add(line);
-    })
+        // sphere image labels
+        const imageBrand = images[name]
+        const imageTexture = new THREE.TextureLoader().load(imageBrand);
+
+        //draw image container for logos
+        const planeGeometry = new THREE.PlaneGeometry(100, 100);
+        const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.position.y = 60
+        sphereBrand.add(plane);
+
+        // lines
+        const tube = new THREE.Mesh(
+          new THREE.TubeGeometry(
+            new THREE.CatmullRomCurve3([
+              new THREE.Vector3(x, y, z),
+              new THREE.Vector3(x1, y1, z1)]), 512, .5, 8, false),
+          new THREE.MeshBasicMaterial({ color: color }));
+        scene.add(tube);
+      })
+    }
+
+    const imageTexture = new THREE.TextureLoader().load(UM_LOGO);
+
+    //draw image container for UM Logo
+    const planeGeometry = new THREE.PlaneGeometry(140, 140).rotateX(-Math.PI * 0.5);
+    const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
+    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.position.y = 10
+    plane.userData.name = "um_logo"
+    scene.add(plane);
 
     // TEXT LOADER
-    const font = new THREE.FontLoader().parse(optimer)
+    const font = new THREE.FontLoader().parse(gotham)
 
     const fontConfig = {
       font: font,
@@ -178,7 +134,7 @@ export default class App {
     axisLabels.forEach(({ label, coordinates }) => {
       const { x, y, z } = coordinates
       const textGeometry = new THREE.TextGeometry(label, fontConfig);
-      const textMaterial = new THREE.MeshBasicMaterial({ color: 000000 })
+      const textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(218, 41, 28)" })
       const textMesh = new THREE.Mesh(textGeometry, textMaterial)
       textMesh.position.set(x, y, z)
       scene.add(textMesh)
@@ -203,8 +159,8 @@ export default class App {
     controls.enablePanning = false;
     // restrict rotation
     controls.maxPolarAngle = Math.PI / 2.8;
-    controls.minPolarAngle = Math.PI / 5;
-    controls.minDistance = 500;
+    controls.minPolarAngle = 0;
+    controls.minDistance = 200;
     controls.maxDistance = 1500;
     controls.minAzimuthAngle = -Math.PI / 5;
     controls.maxAzimuthAngle = Math.PI / 5;
@@ -222,6 +178,17 @@ export default class App {
       // move sphere to target on a 2000ms duration
       tween.to(target, 1000)
       tween.start()
+    }
+
+    function panOut() {
+      var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
+      const target = { x: 100, y: 550, z: 1300 }
+      tween.to(target, 3000)
+      tween.start()
+      tween.onComplete(function () {
+
+        draw()
+      })
     }
 
     // CLICK EVENTS
@@ -259,21 +226,22 @@ export default class App {
       raycaster.setFromCamera(mouse.scene, camera);
       // find all elements being intersected by mouse
       const intersects = raycaster.intersectObjects(scene.children);
-      // if the number of intersected objects is greater than one, select the last one
+      const logo = intersects.find(intersected => intersected.object.userData.name == "um_logo")
+      if (logo) panOut()
       // this selects the colored sphere which is superimposed over the greyed out spheres
-      const index = intersects.length > 1 ? 1 : 0
-      const intersected = intersects[index]
-      if (intersected) {
+      const intersectedSphere = intersects.find(intersected => intersected.object.userData.name &&
+        intersected.object.userData.name != "um_logo")
+      if (intersectedSphere) {
         // use the userData property to identify the sphere by name
-        const objName = intersected.object.userData.name
+        const objName = intersectedSphere.object.userData.name
         // get the correct coordinates for the sphere to travel to
         const position1 = brands.find(el => el.name === objName)?.coordinates.current
         const position0 = brands.find(el => el.name === objName)?.coordinates.previous
         // adjust the target position based on the sphere's current position
-        const target = intersected.object.userData.clicked ? position0 : position1
+        const target = intersectedSphere.object.userData.clicked ? position0 : position1
         // move the sphere to the target position
         // intersected.object is the sphere
-        moveNodes(intersected.object, target)
+        moveNodes(intersectedSphere.object, target)
       }
     }
 
