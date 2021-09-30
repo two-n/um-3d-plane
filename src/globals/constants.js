@@ -81,33 +81,33 @@ const axisLabels = [
   {
     label: 'GROW & PROTECT',
     coordinates: {
-      x: 0,
-      y: 60,
-      z: 0,
+      x: -500,
+      y: 20,
+      z: -500,
     }
   },
   {
     label: 'POWER BRAND',
     coordinates: {
-      x: 800,
-      y: 60,
-      z: 0,
+      x: 300,
+      y: 20,
+      z: -500,
     }
   },
   {
     label: 'GET KNOWN',
     coordinates: {
-      x: 10,
-      y: 60,
-      z: 1050,
+      x: -500,
+      y: 20,
+      z: 500,
     }
   },
   {
     label: 'REINVIGORATE',
     coordinates: {
-      x: 800,
-      y: 80,
-      z: 1050,
+      x: 260,
+      y: 20,
+      z: 500,
     }
   },
 

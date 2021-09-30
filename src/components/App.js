@@ -7,7 +7,7 @@ import * as UM_LOGO from '../assets/images/UM_Logo.png'
 
 import { brands, images, dimensions, height, width, pDims, axisLabels, transformedData } from "../globals/constants"
 
-import * as optimer from '../assets/fonts/Gotham_Medium_Regular.typeface.json'
+import * as gotham from '../assets/fonts/Gotham_Black_Regular.json'
 
 
 export default class App {
@@ -122,7 +122,7 @@ export default class App {
     scene.add(plane);
 
     // TEXT LOADER
-    const font = new THREE.FontLoader().parse(optimer)
+    const font = new THREE.FontLoader().parse(gotham)
 
     const fontConfig = {
       font: font,
@@ -131,14 +131,14 @@ export default class App {
     }
 
     // create axis labels
-    // axisLabels.forEach(({ label, coordinates }) => {
-    //   const { x, y, z } = coordinates
-    //   const textGeometry = new THREE.TextGeometry(label, fontConfig);
-    //   const textMaterial = new THREE.MeshBasicMaterial({ color: 000000 })
-    //   const textMesh = new THREE.Mesh(textGeometry, textMaterial)
-    //   textMesh.position.set(x, y, z)
-    //   scene.add(textMesh)
-    // })
+    axisLabels.forEach(({ label, coordinates }) => {
+      const { x, y, z } = coordinates
+      const textGeometry = new THREE.TextGeometry(label, fontConfig);
+      const textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(218, 41, 28)" })
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial)
+      textMesh.position.set(x, y, z)
+      scene.add(textMesh)
+    })
 
     // LIGHTING
 
