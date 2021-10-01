@@ -53,7 +53,7 @@ export default class App {
     gridHelper2.position.z = -500
     gridHelper2.position.y = 500
 
-    // scene.add(gridHelper2)
+    //scene.add(gridHelper2)
 
 
     //draw spheres
@@ -102,14 +102,26 @@ export default class App {
         const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
         const plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.position.y = 60
+        plane.name = name+"_logo"
+        plane.over = false
         sphereBrand.add(plane);
 
-        // lines
+        //draw lines from sphere back to helper grid
+        const sphereLine = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(x, 0, z), 
+            new THREE.Vector3(x, y, z)
+          ]),
+          new THREE.LineBasicMaterial({ color: color })
+        );
+        scene.add(sphereLine)
+
+        // lines to previous tube
         const tube = new THREE.Mesh(
           new THREE.TubeGeometry(
             new THREE.CatmullRomCurve3([
               new THREE.Vector3(x, y, z),
-              new THREE.Vector3(x1, y1, z1)]), 512, .5, 8, false),
+              new THREE.Vector3(x1, y1, z1)]), 512, 1.5, 8, false),
           new THREE.MeshBasicMaterial({ color: color }));
         scene.add(tube);
       })
@@ -126,20 +138,25 @@ export default class App {
     scene.add(plane);
 
     // DRAW RED AXIS LINES
+    const xLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-600, 0, 0), new THREE.Vector3(600, 0, 0)]),
+      new THREE.LineBasicMaterial({ color: 0xFF0000 })
+    );
+    scene.add(xLine);
 
     const yLine = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 500, 0)]),
       new THREE.LineBasicMaterial({ color: umColors.umRed })
     );
-
     scene.add(yLine);
 
-    const xLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-500, 0, 0), new THREE.Vector3(500, 0, 0)]),
-      new THREE.LineBasicMaterial({ color: 0xFF0000 })
+    const zLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, -600), new THREE.Vector3(0, 0, 600)]),
+      new THREE.LineBasicMaterial({ color: umColors.umRed })
     );
+    scene.add(zLine);
 
-    scene.add(xLine);
+    
 
     // TEXT LOADER
     const fontBlk = new THREE.FontLoader().parse(gotham)
@@ -226,6 +243,22 @@ export default class App {
       tween.start()
     }
 
+    // move logo up and down
+    function animateLogo(logo){
+      // instantiate tween using tween library
+      var tween1 = new TWEEN.Tween(logo.position).easing(TWEEN.Easing.Sinusoidal.InOut)
+      var tween2 = new TWEEN.Tween(logo.position).easing(TWEEN.Easing.Sinusoidal.InOut)
+      tween1.to({ x: 0, y: 80, z: 0 }, 400)
+      tween1.start()
+      tween1.onComplete(function () {
+        tween2.to({ x: 0, y: 60, z: 0 }, 600)
+        tween2.start()
+        tween2.onComplete(function(){
+          logo.over = false
+        })
+      })
+    }
+
     function panOut() {
       var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
       const target = { x: 100, y: 550, z: 1300 }
@@ -265,6 +298,41 @@ export default class App {
       }
     }
 
+    // handle mouse over
+    var handleOver = (e) => {
+      e.preventDefault();
+      if (e.target instanceof HTMLCanvasElement) {
+        const x = e.offsetX + e.target.offsetLeft;
+        const y = e.offsetY + e.target.offsetTop;
+        mouse.screen.x = x;
+        mouse.screen.y = y;
+        mouse.scene.x = (e.offsetX / width) * 2 - 1;
+        mouse.scene.y = -(e.offsetY / height) * 2 + 1;
+        if (!mouse.animating) intersectOver();
+      }
+    }
+
+    var intersectOver = () => {
+      camera.updateMatrixWorld();
+      cameraOrtho.updateMatrixWorld();
+      raycaster.setFromCamera(mouse.scene, camera);
+      // find all elements being intersected by mouse
+      const intersects = raycaster.intersectObjects(scene.children);
+      // this selects the colored sphere which is superimposed over the greyed out spheres
+      const intersectedSphere = intersects.find(intersected => intersected.object.userData.name &&
+        intersected.object.userData.name != "um_logo")
+      if (intersectedSphere) {
+        // use the userData property to identify the logo container by name
+        const objName = intersectedSphere.object.userData.name+"_logo"
+        // get the corresponding logo plane
+        const logo = scene.getObjectByName(objName)
+        // only trigger on hover
+        if(!logo.over){
+          animateLogo(logo)
+          logo.over = true
+        }
+      }
+    }
 
     var intersect = () => {
       camera.updateMatrixWorld();
@@ -300,6 +368,7 @@ export default class App {
 
     // EVENT LISTENERS
     document.body.addEventListener("click", handleClick, false); // to do: possibly remove event listener at page load?
+    document.body.addEventListener("mousemove", handleOver, false);
     window.addEventListener("resize", onWindowResize)
 
     // ANIMATE (renders the scene)
