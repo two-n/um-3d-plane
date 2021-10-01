@@ -35,6 +35,11 @@ const images = {
 const height = window.innerHeight * 0.8
 const width = window.innerWidth
 
+const fontSizes = {
+  lg: 20,
+  md: 14
+}
+
 // TEXT
 const cornerLabels = [
   {
@@ -101,4 +106,4 @@ const axisLabels = [{
 },
 ]
 
-export { images, height, width, cornerLabels, umColors, colors, axisLabels }
+export { images, height, width, cornerLabels, umColors, colors, axisLabels, fontSizes }

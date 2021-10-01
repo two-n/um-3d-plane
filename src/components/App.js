@@ -5,7 +5,7 @@ import oc from 'three-orbit-controls'
 // lib
 import * as UM_LOGO from '../assets/images/UM_Logo_Large.png'
 
-import { images, height, width, cornerLabels, axisLabels, umColors } from "../globals/constants"
+import { images, height, width, cornerLabels, axisLabels, umColors, fontSizes } from "../globals/constants"
 
 import { brands } from "../globals/data"
 
@@ -148,7 +148,7 @@ export default class App {
 
     const cornerFontConfig = {
       font: fontBlk,
-      size: 20,
+      size: fontSizes.lg,
       height: 1,
     }
 
@@ -164,7 +164,7 @@ export default class App {
 
     const axisFontConfig = {
       font: fontRg,
-      size: 14,
+      size: fontSizes.md,
       height: 1,
     }
 
