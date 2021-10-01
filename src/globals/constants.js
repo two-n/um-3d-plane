@@ -5,6 +5,7 @@ import * as Google from '../assets/images/Google_Cloud_logo.png'
 import * as IBM from '../assets/images/IBM_logo.png'
 import * as KPMG from '../assets/images/KPMG_logo.png'
 
+// ASSETS
 const colors = {
   "Accenture": "#932AF5",
   "Deloitte": "#90B943",
@@ -12,6 +13,13 @@ const colors = {
   "IBM": "#396FBB",
   "KPMG": "#103081",
   "Google Cloud": "#D85040"
+}
+
+const umColors = {
+  darkGrey: "rgb(99, 99, 99)",
+  lightGrey: "rgb(156, 156, 156)",
+  black: "rgb(00,00,00)",
+  umRed: "rgb(218, 41, 28)"
 }
 
 const images = {
@@ -23,21 +31,17 @@ const images = {
   "Google Cloud": Google
 }
 
-// CONFIG
+// SIZING
 const height = window.innerHeight * 0.8
 const width = window.innerWidth
 
-// plane dimensions
-const pDims = {
-  x: 0,
-  y: 0,
-  z: 0,
-  w: 1000,
-  h: 10,
-  d: 1000
+const fontSizes = {
+  lg: 20,
+  md: 14
 }
 
-const axisLabels = [
+// TEXT
+const cornerLabels = [
   {
     label: 'GROW & PROTECT',
     coordinates: {
@@ -70,7 +74,36 @@ const axisLabels = [
       z: 500,
     }
   },
-
 ]
 
-export { images, height, width, pDims, axisLabels, colors }
+const axisLabels = [{
+  label: 'WINNING HEARTS',
+  rotateX: true,
+  coordinates: {
+    x: -494,
+    y: 1,
+    z: -6,
+  }
+},
+{
+  label: 'WINNING MINDS',
+  rotateZ: true,
+  coordinates: {
+    x: -6,
+    y: 330,
+    z: 0,
+  }
+},
+{
+  label: 'WINNING WALLETS',
+  rotateX: true,
+  rotateY: true,
+  coordinates: {
+    x: -6,
+    y: 1,
+    z: -290,
+  }
+},
+]
+
+export { images, height, width, cornerLabels, umColors, colors, axisLabels, fontSizes }

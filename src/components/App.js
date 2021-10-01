@@ -5,11 +5,13 @@ import oc from 'three-orbit-controls'
 // lib
 import * as UM_LOGO from '../assets/images/UM_Logo_Large.png'
 
-import { images, height, width, pDims, axisLabels } from "../globals/constants"
+import { images, height, width, cornerLabels, axisLabels, umColors, fontSizes } from "../globals/constants"
 
 import { brands } from "../globals/data"
 
 import * as gotham from '../assets/fonts/Gotham_Black_Regular.json'
+import * as gothamMd from '../assets/fonts/Gotham_Medium_Regular.json'
+
 
 
 export default class App {
@@ -39,14 +41,14 @@ export default class App {
     // ADD SHAPES
 
     // SIMPLE GRID
-    const { x, y, z, w, h, d } = pDims
-    const gridHelper = new THREE.GridHelper(10, 10, 'black', "lightgrey"); // creates the center lines
+
+    const gridHelper = new THREE.GridHelper(10, 10, umColors.black, umColors.lightGrey); // creates the center lines
     gridHelper.scale.set(100, 0, 100);
 
     // add grid
     scene.add(gridHelper);
 
-    const gridHelper2 = new THREE.GridHelper(10, 10, 'black', "lightgrey").rotateX(-Math.PI * 0.5); // creates the center lines
+    const gridHelper2 = new THREE.GridHelper(10, 10, umColors.black, umColors.lightGrey).rotateX(-Math.PI * 0.5); // creates the center lines
     gridHelper2.scale.set(100, 0, 100);
     gridHelper2.position.z = -500
     gridHelper2.position.y = 500
@@ -123,20 +125,62 @@ export default class App {
     plane.userData.name = "um_logo"
     scene.add(plane);
 
-    // TEXT LOADER
-    const font = new THREE.FontLoader().parse(gotham)
+    // DRAW RED AXIS LINES
 
-    const fontConfig = {
-      font: font,
-      size: 20,
+    const yLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 500, 0)]),
+      new THREE.LineBasicMaterial({ color: umColors.umRed })
+    );
+
+    scene.add(yLine);
+
+    const xLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-500, 0, 0), new THREE.Vector3(500, 0, 0)]),
+      new THREE.LineBasicMaterial({ color: 0xFF0000 })
+    );
+
+    scene.add(xLine);
+
+    // TEXT LOADER
+    const fontBlk = new THREE.FontLoader().parse(gotham)
+    const fontRg = new THREE.FontLoader().parse(gothamMd)
+
+
+    const cornerFontConfig = {
+      font: fontBlk,
+      size: fontSizes.lg,
       height: 1,
     }
 
     // create axis labels
-    axisLabels.forEach(({ label, coordinates }) => {
+    cornerLabels.forEach(({ label, coordinates }) => {
       const { x, y, z } = coordinates
-      const textGeometry = new THREE.TextGeometry(label, fontConfig);
-      const textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(218, 41, 28)" })
+      const textGeometry = new THREE.TextGeometry(label, cornerFontConfig);
+      const textMaterial = new THREE.MeshBasicMaterial({ color: umColors.umRed })
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial)
+      textMesh.position.set(x, y, z)
+      scene.add(textMesh)
+    })
+
+    const axisFontConfig = {
+      font: fontRg,
+      size: fontSizes.md,
+      height: 1,
+    }
+
+    axisLabels.forEach(({ label, coordinates, rotateX, rotateY, rotateZ }) => {
+      const { x, y, z } = coordinates
+      const textGeometry = new THREE.TextGeometry(label, axisFontConfig)
+      if (rotateX) {
+        textGeometry.rotateX(-Math.PI * 0.5)
+      }
+      if (rotateY) {
+        textGeometry.rotateY(Math.PI * 0.5);
+      }
+      if (rotateZ) {
+        textGeometry.rotateZ(Math.PI * 0.5)
+      }
+      const textMaterial = new THREE.MeshBasicMaterial({ color: umColors.umRed })
       const textMesh = new THREE.Mesh(textGeometry, textMaterial)
       textMesh.position.set(x, y, z)
       scene.add(textMesh)
