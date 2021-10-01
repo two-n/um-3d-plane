@@ -5,7 +5,9 @@ import oc from 'three-orbit-controls'
 // lib
 import * as UM_LOGO from '../assets/images/UM_Logo_Large.png'
 
-import { brands, images, dimensions, height, width, pDims, axisLabels, transformedData } from "../globals/constants"
+import { images, height, width, pDims, axisLabels } from "../globals/constants"
+
+import { brands } from "../globals/data"
 
 import * as gotham from '../assets/fonts/Gotham_Black_Regular.json'
 

@@ -4,8 +4,6 @@ import * as EY from '../assets/images/EY_logo.png'
 import * as Google from '../assets/images/Google_Cloud_logo.png'
 import * as IBM from '../assets/images/IBM_logo.png'
 import * as KPMG from '../assets/images/KPMG_logo.png'
-import * as data from '../../data/formattedData.json'
-
 
 const colors = {
   "Accenture": "#932AF5",
@@ -16,43 +14,7 @@ const colors = {
   "Google Cloud": "#D85040"
 }
 
-const y_level = 60
-
-// scales
-// x: (-50, 50)
-// y: (-10%, 10%)
-
-// TODO: make scaling dynamic based on data ranges
-
-const produceCoords = (x, z) => {
-  return {
-    x: (x * 10), // account for range and board
-    y: y_level, // constand (distance above board)
-    z: parseInt(z.substring(0, z.length - 2)) * -50  // parse percentage and account for board coords
-  }
-}
-
-const transformedData = data.reduce((acc, [{ name, x_vals, y_vals, year }]) => ({
-  ...acc,
-  [name]: acc[name] ? {
-    ...acc[name],
-    coordinates: {
-      ...acc[name].coordinates,
-      [year]: produceCoords(x_vals, y_vals)
-    }
-  } : {
-      name,
-      coordinates: {
-        [year]: produceCoords(x_vals, y_vals)
-      },
-      color: colors[name]
-    }
-}), {})
-
-
-const brands = Object.values(transformedData)
-
-var images = {
+const images = {
   "Accenture": Accenture,
   "Deloitte": Deloitte,
   "Ernst & Young": EY,
@@ -61,9 +23,7 @@ var images = {
   "Google Cloud": Google
 }
 
-
 // CONFIG
-const dimensions = ({ width: 954, height: 50, depth: 1060 })
 const height = window.innerHeight * 0.8
 const width = window.innerWidth
 
@@ -113,5 +73,4 @@ const axisLabels = [
 
 ]
 
-
-export { brands, images, dimensions, height, width, pDims, axisLabels, transformedData }
+export { images, height, width, pDims, axisLabels, colors }
