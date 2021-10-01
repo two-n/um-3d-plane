@@ -78,6 +78,16 @@ export default class App {
         scaleNodes(sphereTransparent, 2000)
         moveNodes(sphereTransparent, previous, 2000)
 
+        // sphere image labels
+        const imageBrand = images[name]
+        const imageTexture = new THREE.TextureLoader().load(imageBrand);
+
+        //draw image container for logos
+        const planeGeometry = new THREE.PlaneGeometry(100, 100);
+        const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.position.y = 60
+
         // moving brand spheres
         const brandMaterial = new THREE.MeshPhongMaterial({ color })
         const sphereBrand = new THREE.Mesh(
@@ -90,8 +100,16 @@ export default class App {
         sphereBrand.userData.clicked = false
         sphereBrand.scale.set(0, 0, 0)
         scene.add(sphereBrand)
+
+        scaleNodes(sphereBrand, 2000, () => {
+          sphereBrand.add(plane);
+          plane.scale.set(0, 0, 0)
+          scaleNodes(plane, 1000)
+
+        })
+
         moveNodes(sphereBrand, previous, 2000, () => {
-          // lines
+          // draw lines after nodes are drawn
           const tube = new THREE.Mesh(
             new THREE.TubeGeometry(
               new THREE.CatmullRomCurve3([
@@ -100,18 +118,6 @@ export default class App {
             new THREE.MeshBasicMaterial({ color: color }));
           scene.add(tube);
         })
-        scaleNodes(sphereBrand, 2000)
-
-        // sphere image labels
-        const imageBrand = images[name]
-        const imageTexture = new THREE.TextureLoader().load(imageBrand);
-
-        //draw image container for logos
-        const planeGeometry = new THREE.PlaneGeometry(100, 100);
-        const planeMaterial = new THREE.MeshBasicMaterial({ map: imageTexture, transparent: true });
-        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.position.y = 60
-        sphereBrand.add(plane);
 
       })
     }
@@ -231,10 +237,13 @@ export default class App {
     }
 
     // scale nodes into view
-    function scaleNodes(sphere, duration) {
+    function scaleNodes(sphere, duration, callback) {
       var tween = new TWEEN.Tween(sphere.scale).easing(TWEEN.Easing.Sinusoidal.InOut)
       tween.to({ x: 1, y: 1, z: 1 }, duration)
       tween.start()
+      tween.onComplete(function () {
+        if (callback) callback()
+      })
     }
 
     // pan camera out at init
