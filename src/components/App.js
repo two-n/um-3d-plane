@@ -68,8 +68,7 @@ export default class App {
         const { x, y, z } = previous
         const { x: x1, y: y1, z: z1 } = current
 
-        // placeholder spheres
-
+        // origin spheres
         const transparentMaterial = new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.5 })
 
         const sphereTransparent = new THREE.Mesh(
@@ -94,7 +93,16 @@ export default class App {
         sphereBrand.userData.clicked = false
         sphereBrand.scale.set(0, 0, 0)
         scene.add(sphereBrand)
-        moveNodes(sphereBrand, previous, 2000)
+        moveNodes(sphereBrand, previous, 2000, () => {
+          // lines
+          const tube = new THREE.Mesh(
+            new THREE.TubeGeometry(
+              new THREE.CatmullRomCurve3([
+                new THREE.Vector3(x, y, z),
+                new THREE.Vector3(x1, y1, z1)]), 512, .5, 8, false),
+            new THREE.MeshBasicMaterial({ color: color }));
+          scene.add(tube);
+        })
         scaleNodes(sphereBrand, 2000)
 
         // sphere image labels
@@ -108,14 +116,6 @@ export default class App {
         plane.position.y = 60
         sphereBrand.add(plane);
 
-        // lines
-        const tube = new THREE.Mesh(
-          new THREE.TubeGeometry(
-            new THREE.CatmullRomCurve3([
-              new THREE.Vector3(x, y, z),
-              new THREE.Vector3(x1, y1, z1)]), 512, .5, 8, false),
-          new THREE.MeshBasicMaterial({ color: color }));
-        scene.add(tube);
       })
     }
 
@@ -219,7 +219,7 @@ export default class App {
     // TWEENING / TRANSITIONS
 
     // translate positions
-    function moveNodes(sphere, target, duration) {
+    function moveNodes(sphere, target, duration, callback) {
       // instantiate tween using tween library
       var tween = new TWEEN.Tween(sphere.position).easing(TWEEN.Easing.Sinusoidal.InOut)
       // reverse sphere's clicked data
@@ -227,6 +227,9 @@ export default class App {
       // move sphere to target on a 2000ms duration
       tween.to(target, duration)
       tween.start()
+      tween.onComplete(function () {
+        if (callback) callback();
+      })
     }
 
     // scale nodes into view
