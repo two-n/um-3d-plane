@@ -248,7 +248,6 @@ export default class App {
 
     // pan camera out at init
     function panOut() {
-      console.log("pan out")
       var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
       const target = { x: 0, y: 550, z: 1300 }
       tween.to(target, 3000)
