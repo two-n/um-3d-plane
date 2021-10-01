@@ -10,18 +10,22 @@ const xRange = [-500, 500]
 const yRange = [20, 160]
 const zRange = [500, -500]
 
-const getDomain = (accessor) => extent(flatData.map(d => d[accessor]))
+// @param accessor: string
+// e.g. getDomain("x_vals")
+// removed in favor of a constant value (client's request for center to be 100, 100)
+// const getDomain = (accessor) => extent(flatData.map(d => d[accessor]))
+const domain = [0, 200]
 
 var xScale = scaleLinear()
-  .domain(getDomain("x_vals"))
+  .domain(domain)
   .range(xRange);
 
 var yScale = scaleLinear()
-  .domain(getDomain("y_vals"))
+  .domain(domain)
   .range(yRange);
 
 var zScale = scaleLinear()
-  .domain(getDomain("z_vals"))
+  .domain(domain)
   .range(zRange);
 
 const produceCoords = (x, y, z) => {
