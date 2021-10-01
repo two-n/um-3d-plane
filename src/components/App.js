@@ -56,12 +56,11 @@ export default class App {
     // scene.add(gridHelper2)
 
 
-    //draw spheres
-
-    const geometry = new THREE.SphereGeometry(15, 32, 16);
+    // draw spheres
+    const geometryTransparent = new THREE.SphereGeometry(8, 32, 16);
+    const geometry = new THREE.SphereGeometry(18, 32, 16);
 
     // DRAW SPHERES, LINES and LABELS
-
     const draw = () => {
       brands.forEach(({ coordinates, color, name }) => {
         // config
@@ -74,11 +73,14 @@ export default class App {
         const transparentMaterial = new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.5 })
 
         const sphereTransparent = new THREE.Mesh(
-          geometry,
+          geometryTransparent,
           transparentMaterial
         );
-        sphereTransparent.position.set(x, y, z)
+        sphereTransparent.position.set(0, 0, 0)
+        sphereTransparent.scale.set(0, 0, 0)
         scene.add(sphereTransparent)
+        scaleNodes(sphereTransparent, 2000)
+        moveNodes(sphereTransparent, previous, 2000)
 
         // moving brand spheres
         const brandMaterial = new THREE.MeshPhongMaterial({ color })
@@ -87,11 +89,13 @@ export default class App {
           brandMaterial
         );
 
-        sphereBrand.position.set(x, y, z)
+        sphereBrand.position.set(0, 0, 0)
         sphereBrand.userData.name = name
         sphereBrand.userData.clicked = false
+        sphereBrand.scale.set(0, 0, 0)
         scene.add(sphereBrand)
-
+        moveNodes(sphereBrand, previous, 2000)
+        scaleNodes(sphereBrand, 2000)
 
         // sphere image labels
         const imageBrand = images[name]
@@ -212,27 +216,33 @@ export default class App {
     controls.maxAzimuthAngle = Math.PI / 5;
 
 
-    // TWEENING
+    // TWEENING / TRANSITIONS
 
     // translate positions
-    function moveNodes(sphere, target) {
+    function moveNodes(sphere, target, duration) {
       // instantiate tween using tween library
       var tween = new TWEEN.Tween(sphere.position).easing(TWEEN.Easing.Sinusoidal.InOut)
       // reverse sphere's clicked data
       sphere.userData.clicked = !sphere.userData.clicked
-      // requestAnimationFrame(animate)
       // move sphere to target on a 2000ms duration
-      tween.to(target, 1000)
+      tween.to(target, duration)
       tween.start()
     }
 
+    // scale nodes into view
+    function scaleNodes(sphere, duration) {
+      var tween = new TWEEN.Tween(sphere.scale).easing(TWEEN.Easing.Sinusoidal.InOut)
+      tween.to({ x: 1, y: 1, z: 1 }, duration)
+      tween.start()
+    }
+
+    // pan camera out at init
     function panOut() {
       var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
       const target = { x: 100, y: 550, z: 1300 }
       tween.to(target, 3000)
       tween.start()
       tween.onComplete(function () {
-
         draw()
       })
     }
@@ -287,7 +297,7 @@ export default class App {
         const target = intersectedSphere.object.userData.clicked ? position0 : position1
         // move the sphere to the target position
         // intersected.object is the sphere
-        moveNodes(intersectedSphere.object, target)
+        moveNodes(intersectedSphere.object, target, 1000)
       }
     }
 
