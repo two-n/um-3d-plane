@@ -7,7 +7,7 @@ import { colors } from './constants'
 const flatData = data.flat()
 
 const xRange = [-500, 500]
-const yRange = [20, 160]
+const yRange = [0, 500]
 const zRange = [500, -500]
 
 // @param accessor: string

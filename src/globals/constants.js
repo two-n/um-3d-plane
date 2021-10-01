@@ -15,6 +15,13 @@ const colors = {
   "Google Cloud": "#D85040"
 }
 
+const umColors = {
+  darkGrey: "rgb(99, 99, 99)",
+  lightGrey: "rgb(156, 156, 156)",
+  black: "rgb(00,00,00)",
+  umRed: "rgb(218, 41, 28)"
+}
+
 const images = {
   "Accenture": Accenture,
   "Deloitte": Deloitte,
@@ -68,7 +75,7 @@ const axisLabels = [{
   label: 'WINNING HEARTS',
   rotateX: true,
   coordinates: {
-    x: -490,
+    x: -494,
     y: 1,
     z: -6,
   }
@@ -78,7 +85,7 @@ const axisLabels = [{
   rotateZ: true,
   coordinates: {
     x: -6,
-    y: 140,
+    y: 330,
     z: 0,
   }
 },
@@ -89,9 +96,9 @@ const axisLabels = [{
   coordinates: {
     x: -6,
     y: 1,
-    z: -280,
+    z: -290,
   }
 },
 ]
 
-export { images, height, width, cornerLabels, colors, axisLabels }
+export { images, height, width, cornerLabels, umColors, colors, axisLabels }
