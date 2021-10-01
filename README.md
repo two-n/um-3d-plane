@@ -18,6 +18,6 @@ parses csv file named `UM_Chessboard_Data.csv` in `./data` folder and creates a 
 
 *requirements for generating data*
 csv must be named `UM_Chessboard_Data.csv`
-csv must have the following column format: name,x_values,y_values,z_values,year
+csv must have the following column format: name,x_values,z_values,y_values,year
 `name` data must be capitalized to match in-app dictionaries for color and images (e.g. "Accenture")
 `z_values` and `y_values` must be swapped in the csv after receiving them from the client due to the way three.js draws on the canvas
