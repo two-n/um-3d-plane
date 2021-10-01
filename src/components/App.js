@@ -6,18 +6,15 @@ import oc from 'three-orbit-controls'
 import * as UM_LOGO from '../assets/images/UM_Logo_Large.png'
 
 import { images, height, width, cornerLabels, axisLabels, umColors, fontSizes } from "../globals/constants"
-
+// import { useResponsiveSize } from '../globals/helpers'
 import { brands } from "../globals/data"
 
 import * as gotham from '../assets/fonts/Gotham_Black_Regular.json'
 import * as gothamMd from '../assets/fonts/Gotham_Medium_Regular.json'
 
-
-
 export default class App {
   constructor() { }
   init() {
-
     // instantiate orbit controls (allows user to interact and rotate graph)
     const OrbitControls = oc(THREE)
 
@@ -127,6 +124,7 @@ export default class App {
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.position.y = 10
     plane.userData.name = "um_logo"
+    plane.userData.clicked = false;
     scene.add(plane);
 
     // DRAW RED AXIS LINES
@@ -241,11 +239,13 @@ export default class App {
 
     // pan camera out at init
     function panOut() {
+      console.log("pan out")
       var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
-      const target = { x: 100, y: 550, z: 1300 }
+      const target = { x: 0, y: 550, z: 1300 }
       tween.to(target, 3000)
       tween.start()
       tween.onComplete(function () {
+        plane.userData.clicked = true
         draw()
       })
     }
@@ -286,7 +286,8 @@ export default class App {
       // find all elements being intersected by mouse
       const intersects = raycaster.intersectObjects(scene.children);
       const logo = intersects.find(intersected => intersected.object.userData.name == "um_logo")
-      if (logo) panOut()
+      // pan out if logo clicked for the first time
+      if (logo && !logo.object.userData.clicked) panOut()
       // this selects the colored sphere which is superimposed over the greyed out spheres
       const intersectedSphere = intersects.find(intersected => intersected.object.userData.name &&
         intersected.object.userData.name != "um_logo")
