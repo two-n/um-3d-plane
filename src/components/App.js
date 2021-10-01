@@ -5,11 +5,13 @@ import oc from 'three-orbit-controls'
 // lib
 import * as UM_LOGO from '../assets/images/UM_Logo_Large.png'
 
-import { images, height, width, pDims, axisLabels } from "../globals/constants"
+import { images, height, width, pDims, cornerLabels, axisLabels } from "../globals/constants"
 
 import { brands } from "../globals/data"
 
 import * as gotham from '../assets/fonts/Gotham_Black_Regular.json'
+import * as gothamMd from '../assets/fonts/Gotham_Medium_Regular.json'
+
 
 
 export default class App {
@@ -39,7 +41,7 @@ export default class App {
     // ADD SHAPES
 
     // SIMPLE GRID
-    const { x, y, z, w, h, d } = pDims
+
     const gridHelper = new THREE.GridHelper(10, 10, 'black', "lightgrey"); // creates the center lines
     gridHelper.scale.set(100, 0, 100);
 
@@ -124,18 +126,44 @@ export default class App {
     scene.add(plane);
 
     // TEXT LOADER
-    const font = new THREE.FontLoader().parse(gotham)
+    const fontBlk = new THREE.FontLoader().parse(gotham)
+    const fontRg = new THREE.FontLoader().parse(gothamMd)
 
-    const fontConfig = {
-      font: font,
+
+    const cornerFontConfig = {
+      font: fontBlk,
       size: 20,
       height: 1,
     }
 
     // create axis labels
-    axisLabels.forEach(({ label, coordinates }) => {
+    cornerLabels.forEach(({ label, coordinates }) => {
       const { x, y, z } = coordinates
-      const textGeometry = new THREE.TextGeometry(label, fontConfig);
+      const textGeometry = new THREE.TextGeometry(label, cornerFontConfig);
+      const textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(218, 41, 28)" })
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial)
+      textMesh.position.set(x, y, z)
+      scene.add(textMesh)
+    })
+
+    const axisFontConfig = {
+      font: fontRg,
+      size: 14,
+      height: 1,
+    }
+
+    axisLabels.forEach(({ label, coordinates, rotateX, rotateY, rotateZ }) => {
+      const { x, y, z } = coordinates
+      const textGeometry = new THREE.TextGeometry(label, axisFontConfig)
+      if (rotateX) {
+        textGeometry.rotateX(-Math.PI * 0.5)
+      }
+      if (rotateY) {
+        textGeometry.rotateY(Math.PI * 0.5);
+      }
+      if (rotateZ) {
+        textGeometry.rotateZ(Math.PI * 0.5)
+      }
       const textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(218, 41, 28)" })
       const textMesh = new THREE.Mesh(textGeometry, textMaterial)
       textMesh.position.set(x, y, z)
