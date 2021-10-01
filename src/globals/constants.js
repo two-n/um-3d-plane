@@ -86,22 +86,22 @@ const axisLabels = [{
   }
 },
 {
-  label: 'WINNING MINDS',
+  label: 'WINNING WALLETS',
   rotateZ: true,
   coordinates: {
     x: -6,
-    y: 330,
+    y: 300,
     z: 0,
   }
 },
 {
-  label: 'WINNING WALLETS',
+  label: 'WINNING MINDS',
   rotateX: true,
   rotateY: true,
   coordinates: {
     x: -6,
     y: 1,
-    z: -290,
+    z: -320,
   }
 },
 ]

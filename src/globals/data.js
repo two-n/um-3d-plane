@@ -13,7 +13,7 @@ const zRange = [500, -500]
 // e.g. getDomain("x_vals")
 // removed in favor of a constant value (client's request for center to be 100, 100)
 // const getDomain = (accessor) => extent(flatData.map(d => d[accessor]))
-const domain = [0, 200]
+const domain = [10, 190]
 
 var xScale = scaleLinear()
   .domain(domain)
