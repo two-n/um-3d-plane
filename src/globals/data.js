@@ -4,10 +4,9 @@ import { extent } from 'd3-array';
 import * as data from '../../data/formattedData.json'
 import { colors } from './constants'
 
-const flatData = data.flat()
-
+// the board is 1000 by 1000 with the center point at 0
 const xRange = [-500, 500]
-const yRange = [0, 500]
+const yRange = [0, 500] // only show positive part of Y plane
 const zRange = [500, -500]
 
 // @param accessor: string
@@ -36,7 +35,30 @@ const produceCoords = (x, y, z) => {
   }
 }
 
-const transformedData = flatData.reduce((acc, { name, x_vals, y_vals, z_vals, year }) => ({
+// produces the following shape
+// {
+//   "Accenture": {
+//     name: "Accenture",
+//     coordinates: {
+//       previous: {
+//         x: 0,
+//         y: 0,
+//         z: 0
+//       },
+//       current: {
+//         x: 5,
+//         y: 5,
+//         z: 5
+//       }
+//     },
+//     color: "#fff"
+//   },
+//  { "KPG": {
+//     ...
+//   }}
+// }
+
+const transformedData = data.flat().reduce((acc, { name, x_vals, y_vals, z_vals, year }) => ({
   ...acc,
   [name]: acc[name] ? {
     ...acc[name],
@@ -53,7 +75,7 @@ const transformedData = flatData.reduce((acc, { name, x_vals, y_vals, z_vals, ye
     }
 }), {})
 
-
+// get array of objects
 const brands = Object.values(transformedData)
 
 export { brands }
