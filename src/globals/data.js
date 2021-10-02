@@ -6,25 +6,27 @@ import { colors } from './constants'
 
 // the board is 1000 by 1000 with the center point at 0
 const xRange = [-500, 500]
-const yRange = [0, 500] // only show positive part of Y plane
+const yRange = [-500, 500] // only show positive part of Y plane
 const zRange = [500, -500]
 
 // @param accessor: string
 // e.g. getDomain("x_vals")
 // removed in favor of a constant value (client's request for center to be 100, 100)
 // const getDomain = (accessor) => extent(flatData.map(d => d[accessor]))
-const domain = [10, 190]
+const xDomain = [10, 190]
+const yDomain = [50, 150]
+const zDomain = [50, 150]
 
 var xScale = scaleLinear()
-  .domain(domain)
+  .domain(xDomain)
   .range(xRange);
 
 var yScale = scaleLinear()
-  .domain(domain)
+  .domain(yDomain)
   .range(yRange);
 
 var zScale = scaleLinear()
-  .domain(domain)
+  .domain(zDomain)
   .range(zRange);
 
 const produceCoords = (x, y, z) => {

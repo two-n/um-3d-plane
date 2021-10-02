@@ -21,6 +21,7 @@ export default class App {
     // CREATE SCENE
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
+    
 
     // CREATE CAMERA
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.2, 4500);
@@ -37,20 +38,23 @@ export default class App {
 
     // ADD SHAPES
 
-    // SIMPLE GRID
+    // SIMPLE GRIDS
 
-    const gridHelper = new THREE.GridHelper(10, 10, umColors.black, umColors.lightGrey); // creates the center lines
-    gridHelper.scale.set(100, 0, 100);
-
-    // add grid
-    scene.add(gridHelper);
-
-    const gridHelper2 = new THREE.GridHelper(10, 10, umColors.black, umColors.lightGrey).rotateX(-Math.PI * 0.5); // creates the center lines
-    gridHelper2.scale.set(100, 0, 100);
-    gridHelper2.position.z = -500
+    //base grid
+    const gridHelper1 = new THREE.GridHelper(10, 10, umColors.black, umColors.lightGrey); // creates the center lines
+    gridHelper1.scale.set(100, 0, 100);
+    scene.add(gridHelper1);
+    //top grid
+    const gridHelper2 = new THREE.GridHelper(2, 2, umColors.black, umColors.lightGrey); // creates the center lines
+    gridHelper2.scale.set(500, 0, 500);
     gridHelper2.position.y = 500
+    scene.add(gridHelper2);
+    //bottom grid
+    const gridHelper3 = new THREE.GridHelper(2, 2, umColors.black, umColors.lightGrey); // creates the center lines
+    gridHelper3.scale.set(500, 0, 500);
+    gridHelper3.position.y = -500
+    scene.add(gridHelper3);
 
-    //scene.add(gridHelper2)
 
 
     // draw spheres
@@ -72,7 +76,7 @@ export default class App {
           geometryTransparent,
           transparentMaterial
         );
-        sphereTransparent.position.set(0, 0, 0)
+        sphereTransparent.position.set(0, 1000, 0)
         sphereTransparent.scale.set(0, 0, 0)
         scene.add(sphereTransparent)
         scaleNodes(sphereTransparent, 2000)
@@ -97,9 +101,9 @@ export default class App {
           brandMaterial
         );
 
-        sphereBrand.position.set(0, 0, 0)
+        sphereBrand.position.set(0, 1000, 0)
         sphereBrand.userData.name = name
-        sphereBrand.userData.clicked = false
+        sphereBrand.userData.clicked = true
         sphereBrand.scale.set(0, 0, 0)
         scene.add(sphereBrand)
 
@@ -122,14 +126,14 @@ export default class App {
         })
 
         //draw lines from sphere back to helper grid
-        const sphereLine = new THREE.Line(
-          new THREE.BufferGeometry().setFromPoints([
-            new THREE.Vector3(x, 0, z), 
-            new THREE.Vector3(x, y, z)
-          ]),
-          new THREE.LineBasicMaterial({ color: color })
-        );
-        scene.add(sphereLine)
+        // const sphereLine = new THREE.Line(
+        //   new THREE.BufferGeometry().setFromPoints([
+        //     new THREE.Vector3(x, 0, z), 
+        //     new THREE.Vector3(x, y, z)
+        //   ]),
+        //   new THREE.LineBasicMaterial({ color: color })
+        // );
+        // scene.add(sphereLine)
 
       })
     }
@@ -153,7 +157,7 @@ export default class App {
     scene.add(xLine);
 
     const yLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 500, 0)]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, -500, 0), new THREE.Vector3(0, 500, 0)]),
       new THREE.LineBasicMaterial({ color: umColors.umRed })
     );
     scene.add(yLine);
@@ -229,7 +233,7 @@ export default class App {
     controls.screenSpacePanning = false;
     controls.enablePanning = false;
     // restrict rotation
-    controls.maxPolarAngle = Math.PI / 2.8;
+    controls.maxPolarAngle = Math.PI/2;
     controls.minPolarAngle = 0;
     controls.minDistance = 200;
     controls.maxDistance = 1500;
@@ -281,13 +285,16 @@ export default class App {
 
     // pan camera out at init
     function panOut() {
-      var tween = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Sinusoidal.InOut)
-      const target = { x: 0, y: 550, z: 1300 }
-      tween.to(target, 3000)
-      tween.start()
-      tween.onComplete(function () {
+      var tween1 = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Cubic.InOut)
+      var tween2 = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Cubic.InOut)
+
+      tween1.to({ x: 0, y: 550, z: 1300 }, 3000)
+      tween1.start()
+      tween1.onComplete(function () {
         plane.userData.clicked = true
         draw()
+        tween2.to({ x: 600, y: 600, z: 1300 }, 1000)
+        tween2.start()
       })
     }
 
