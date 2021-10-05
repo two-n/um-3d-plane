@@ -36,7 +36,7 @@ const height = window.innerHeight //* 0.8
 const width = window.innerWidth
 
 const fontSizes = {
-  xl: 140,
+  xl: 32,
   lg: 20,
   md: 14
 }
@@ -78,30 +78,30 @@ const cornerLabels = [
 ]
 
 const axisLabels = [{
-  label: 'WINNING HEARTS',
+  label: 'HEARTS',
   rotateX: true,
   coordinates: {
     x: 500,
-    y: 1,
+    y: 6,
     z: -6,
   }
 },
 {
-  label: 'WINNING WALLETS',
+  label: 'WALLETS',
   rotateZ: true,
   coordinates: {
-    x: -6,
-    y: 300,
+    x: -10,
+    y: 340,
     z: 0,
   }
 },
 {
-  label: 'WINNING MINDS',
+  label: 'MINDS',
   rotateX: true,
   rotateY: true,
   coordinates: {
     x: -6,
-    y: 1,
+    y: 6,
     z: -500,
   }
 },
