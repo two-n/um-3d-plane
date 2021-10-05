@@ -10,14 +10,46 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   // font-size:100%;
   font:inherit;
   font-family: Gotham;
-  vertical-align:baseline
+  vertical-align:middle;
 }
 
 .banner {
-  font-size: 20px;
+  // font-size: 20px;
   text-transform: uppercase;
-  color: white;
+  color: black;
   font-weight: bold;
-  padding: 20px;
+  // padding: 20px;
+  padding-top: 20px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 20px;
+  display: flex;
+  align-self: center;
+  justify-content: flex-start;
 }
-
+.bannertext {
+  font-size: 20px;
+  padding: 20px;
+  flex: 1;
+}
+.img {
+  font-size: 20px;
+  display: inline-block;
+  flex: 1;
+}
+.button {
+  padding: 20px;
+  flex: 1;
+}
+.legend { 
+  padding: 20px;
+  list-style: none; 
+  flex: 1;
+  font-size: 16px;
+}
+.legend li { float: left; margin-right: 10px; }
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+.legend .accenture { background-color: #932AF5; }
+.legend .deloitte { background-color: #90B943; }
+.legend .ey { background-color: #FBE64D; }
+.legend .kpmg { background-color: #103081; }
