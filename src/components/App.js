@@ -221,7 +221,7 @@ export default class App {
 
     const axisFontConfig = {
       font: fontRg,
-      size: fontSizes.xl,
+      size: fontSizes.lg,
       height: 1,
     }
 
