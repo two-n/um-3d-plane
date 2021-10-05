@@ -88,6 +88,7 @@ export default class App {
     const geometryTransparent = new THREE.SphereGeometry(8, 32, 16);
     const geometry = new THREE.SphereGeometry(18, 32, 16);
 
+
     // DRAW SPHERES, LINES and LABELS
     const draw = () => {
       brands.forEach(({ coordinates, color, name }) => {
@@ -120,7 +121,8 @@ export default class App {
               plane.position.y = 60
               plane.name = name+"_logo"
               plane.over = false
-
+        
+        console.log(plane.name)
         // moving brand spheres
         const brandMaterial = new THREE.MeshPhongMaterial({ color })
         const sphereBrand = new THREE.Mesh(
@@ -207,7 +209,7 @@ export default class App {
 
     const cornerFontConfig = {
       font: fontBlk,
-      size: 30,//fontSizes.lg,
+      size: fontSizes.xl,
       height: 1,
     }
 
@@ -221,13 +223,13 @@ export default class App {
 
     const axisFontConfig = {
       font: fontRg,
-      size: fontSizes.xl,
+      size: fontSizes.lg,
       height: 1,
     }
 
     axisLabels.forEach(({ label, coordinates, rotateX, rotateY, rotateZ }) => {
       const { x, y, z } = coordinates
-      const textGeometry = new THREE.TextGeometry(label, axisFontConfig)
+      const textGeometry = new THREE.TextGeometry("WINNING\n"+label, axisFontConfig)
       if (rotateX) {
         textGeometry.rotateX(-Math.PI * 0.5)
       }
@@ -240,6 +242,8 @@ export default class App {
       const textMaterial = new THREE.MeshBasicMaterial({ color: umColors.black })
       const textMesh = new THREE.Mesh(textGeometry, textMaterial)
       textMesh.position.set(x, y, z)
+      textMesh.name = "WINNING "+label
+      //console.log(textMesh.name)
       scene.add(textMesh)
     })
 
@@ -351,17 +355,6 @@ export default class App {
     function panDown() {
       var tween1 = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Cubic.InOut)
       tween1.to({ x: 0, y: 1500, z: 0 }, 1000)
-      tween1.start()
-      // tween1.onComplete(function () {
-      //   plane.userData.clicked = true
-      //   draw()
-      //   tween2.to({ x: 600, y: 600, z: 1300 }, 1000)
-      //   tween2.start()
-      // })
-    }
-    function panHome() {
-      var tween1 = new TWEEN.Tween(camera.position).easing(TWEEN.Easing.Cubic.InOut)
-      tween1.to({ x: 600, y: 600, z: 0 }, 1300)
       tween1.start()
       // tween1.onComplete(function () {
       //   plane.userData.clicked = true
@@ -498,8 +491,24 @@ export default class App {
     document.body.addEventListener("mousemove", handleOver, false);
     window.addEventListener("resize", onWindowResize)
 
+    //const moving = false
+
     // ANIMATE (renders the scene)
     const animate = () => {
+      //console.log(controls.getPolarAngle())
+      const a = controls.getPolarAngle();
+      const wh = scene.getObjectByName("WINNING HEARTS")
+      const wm = scene.getObjectByName("WINNING MINDS")
+      //console.log(a,wh)
+      if(wh && a > .78){
+        wh.rotation.set(Math.PI * 0.5,0,0)
+        //wm.rotation.set(0,0,-Math.PI * 0.5)
+      }else{
+        wh.rotation.set(0,0,0)
+        //wm.rotation.set(0,0,0)
+      }
+
+
       TWEEN.update()
       controls.update()
       renderer.render(scene, camera);
