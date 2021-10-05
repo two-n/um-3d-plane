@@ -17,7 +17,7 @@ const colors = {
 
 const umColors = {
   darkGrey: "rgb(99, 99, 99)",
-  lightGrey: "rgb(156, 156, 156)",
+  lightGrey: "rgb(200, 200, 200)",
   black: "rgb(00,00,00)",
   umRed: "rgb(218, 41, 28)"
 }
@@ -32,10 +32,11 @@ const images = {
 }
 
 // SIZING
-const height = window.innerHeight * 0.8
+const height = window.innerHeight //* 0.8
 const width = window.innerWidth
 
 const fontSizes = {
+  xl: 140,
   lg: 20,
   md: 14
 }
@@ -80,7 +81,7 @@ const axisLabels = [{
   label: 'WINNING HEARTS',
   rotateX: true,
   coordinates: {
-    x: -494,
+    x: 500,
     y: 1,
     z: -6,
   }
@@ -101,7 +102,7 @@ const axisLabels = [{
   coordinates: {
     x: -6,
     y: 1,
-    z: -320,
+    z: -500,
   }
 },
 ]
