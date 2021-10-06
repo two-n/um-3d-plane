@@ -496,19 +496,13 @@ export default class App {
     // ANIMATE (renders the scene)
     const animate = () => {
       //console.log(controls.getPolarAngle())
-      const a = controls.getPolarAngle();
-      const wh = scene.getObjectByName("WINNING HEARTS")
-      const wm = scene.getObjectByName("WINNING MINDS")
-      //console.log(a,wh)
-      if(wh && a > .78){
-        wh.rotation.set(Math.PI * 0.5,0,0)
-        //wm.rotation.set(0,0,-Math.PI * 0.5)
-      }else{
-        wh.rotation.set(0,0,0)
-        //wm.rotation.set(0,0,0)
-      }
-
-
+      const a = controls.getPolarAngle()
+      const b = controls.getAzimuthalAngle()
+      const wHearts = scene.getObjectByName("WINNING HEARTS")
+      const wMinds = scene.getObjectByName("WINNING MINDS")
+      console.log(a,b)
+      if(wHearts){wHearts.rotation.set(controls.getPolarAngle(),0,0)}
+      if(wMinds){wMinds.rotation.set(0,0,controls.getAzimuthalAngle())}
       TWEEN.update()
       controls.update()
       renderer.render(scene, camera);
