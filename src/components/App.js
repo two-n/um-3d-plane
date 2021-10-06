@@ -41,37 +41,42 @@ export default class App {
     // SIMPLE GRIDS
 
     //base grid
-    const gridHelper1 = new THREE.GridHelper(10, 10, umColors.umRed, umColors.darkGrey); // creates the center lines
+    const gridHelper1 = new THREE.GridHelper(10, 10, umColors.umRed, umColors.lightGrey); 
           gridHelper1.scale.set(100, 0, 100);
     scene.add(gridHelper1);
     //top grid
-    const gridHelper2 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.lightGrey); // creates the center lines
+    const gridHelper2 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.black); 
           gridHelper2.scale.set(500, 0, 500);
           gridHelper2.position.y = 500
-    scene.add(gridHelper2);
+    // scene.add(gridHelper2);
     //bottom grid
-    const gridHelper3 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.lightGrey); // creates the center lines
+    const gridHelper3 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.black); 
           gridHelper3.scale.set(500, 0, 500);
           gridHelper3.position.y = -500
-    scene.add(gridHelper3);
+    // scene.add(gridHelper3);
     //left-hand grid
-    const gridHelper4 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.lightGrey); // creates the center lines
+    const gridHelper4 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.black); 
           gridHelper4.scale.set(500, 0, 500);
           gridHelper4.position.x = -500
           gridHelper4.rotation.z = Math.PI / 2
-    scene.add(gridHelper4);
+    // scene.add(gridHelper4);
     //right-hand grid
-    const gridHelper5 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.lightGrey); // creates the center lines
-          gridHelper5.scale.set(500, 0, 500);
+    const gridHelper5 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.black); 
           gridHelper5.position.x = 500
           gridHelper5.rotation.z = Math.PI / 2
-    scene.add(gridHelper5);
+    // scene.add(gridHelper5);
     //far grid
-    const gridHelper6 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.lightGrey); // creates the center lines
-          gridHelper6.scale.set(500, 0, 500);
+    const gridHelper6 = new THREE.GridHelper(2, 2, umColors.lightGrey, umColors.black); 
           gridHelper6.position.z = -500
           gridHelper6.rotation.x = Math.PI / 2
-    scene.add(gridHelper6);
+    // scene.add(gridHelper6);
+    //center grid
+    const gridHelper7 = new THREE.GridHelper(10, 10, umColors.umRed, umColors.lightGrey); 
+          gridHelper7.scale.set(100, 0, 100);
+          gridHelper7.rotation.x = Math.PI / 2
+          // gridHelper7.position.z = -500
+    scene.add(gridHelper7);
+
 
     //FUTUREPROOF red plane
     const fpGeometry = new THREE.PlaneGeometry(500,500)
@@ -82,6 +87,14 @@ export default class App {
           fpPlane.position.z = -250
           fpPlane.visible = false
     scene.add(fpPlane);
+
+    // const fpPlane2 = new THREE.Mesh(fpGeometry, fpMaterial);
+    //       //fpPlane2.rotation.x = Math.PI / 2
+    //       fpPlane2.position.x = 250
+    //       fpPlane2.position.y = 250
+    //       // fpPlane2.position.z = -500
+    //       // fpPlane2.visible = false
+    // scene.add(fpPlane2);
 
 
     // draw spheres
@@ -122,7 +135,7 @@ export default class App {
               plane.name = name+"_logo"
               plane.over = false
         
-        console.log(plane.name)
+        // console.log(plane.name)
         // moving brand spheres
         const brandMaterial = new THREE.MeshPhongMaterial({ color })
         const sphereBrand = new THREE.Mesh(
@@ -183,19 +196,19 @@ export default class App {
 
     // DRAW RED AXIS LINES
     const xLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-600, 0, 0), new THREE.Vector3(600, 0, 0)]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-700, 0, 0), new THREE.Vector3(700, 0, 0)]),
       new THREE.LineBasicMaterial({ color: 0xFF0000 })
     );
     scene.add(xLine);
 
     const yLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, -500, 0), new THREE.Vector3(0, 500, 0)]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, -700, 0), new THREE.Vector3(0, 700, 0)]),
       new THREE.LineBasicMaterial({ color: umColors.umRed })
     );
     scene.add(yLine);
 
     const zLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, -600), new THREE.Vector3(0, 0, 600)]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, -700), new THREE.Vector3(0, 0, 700)]),
       new THREE.LineBasicMaterial({ color: umColors.umRed })
     );
     scene.add(zLine);
@@ -217,7 +230,7 @@ export default class App {
     const textGeometry = new THREE.TextGeometry("FUTUREPROOF", cornerFontConfig);
     const textMaterial = new THREE.MeshBasicMaterial({ color: umColors.umRed })
     const fpText = new THREE.Mesh(textGeometry, textMaterial)
-    fpText.position.set(80, 250, -500)
+    fpText.position.set(150, 300, -500)
     fpText.visible = false
     scene.add(fpText)
 
@@ -367,7 +380,7 @@ export default class App {
     // CLICK EVENTS
     // Add event listener on keypress
     document.addEventListener("keypress", (event) => {
-      console.log(event.key)
+      // console.log(event.key)
       if(event.key == "1"){ panFront()}
       if(event.key == "2"){ panDown()}
       if(event.key == "3"){ panOut()}
@@ -500,9 +513,17 @@ export default class App {
       const b = controls.getAzimuthalAngle()
       const wHearts = scene.getObjectByName("WINNING HEARTS")
       const wMinds = scene.getObjectByName("WINNING MINDS")
-      console.log(a,b)
-      if(wHearts){wHearts.rotation.set(controls.getPolarAngle(),0,0)}
-      if(wMinds){wMinds.rotation.set(0,0,controls.getAzimuthalAngle())}
+      const wWallets = scene.getObjectByName("WINNING WALLETS")
+      //console.log(b)
+      if(wHearts){ wHearts.rotation.set(controls.getPolarAngle(),0,0) }
+      if(wMinds){ 
+        b >= 0 ? wMinds.rotation.set(0,0,-a) : wMinds.rotation.set(0,Math.PI,-a) 
+        b >= 0 ? wMinds.position.z = -500 : wMinds.position.z = -700
+        wMinds.scale.set(1*(1+a/2),0,1*(1+a/2))
+      }
+      //if(wMinds){ wMinds.scale.set(1*(1+a/2),1,1*(1+a/2)) }
+      if(wWallets){wWallets.rotation.set(0,controls.getAzimuthalAngle(),0)}
+
       TWEEN.update()
       controls.update()
       renderer.render(scene, camera);
