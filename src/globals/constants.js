@@ -91,7 +91,7 @@ const axisLabels = [{
   rotateZ: true,
   coordinates: {
     x: -10,
-    y: 340,
+    y: 500,
     z: 0,
   }
 },
@@ -101,9 +101,14 @@ const axisLabels = [{
   rotateY: true,
   coordinates: {
     x: -6,
-    y: 6,
+    y: 0,
     z: -500,
   }
+  // coordinates: {
+  //   x: -6,
+  //   y: 0,
+  //   z: -500,
+  // }
 },
 ]
 
